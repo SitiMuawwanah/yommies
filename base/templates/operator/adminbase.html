@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" dir="ltr">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}{% endblock %} - Yommies</title>
+
+<link rel="stylesheet" href="{% static 'backend/bower_components/bootstrap/dist/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'backend/bower_components/font-awesome/css/font-awesome.min.css' %}">
+  <link rel="stylesheet" href="{% static 'backend/bower_components/Ionicons/css/ionicons.min.css' %}">
+  <link rel="stylesheet" href="{% static 'backend/dist/css/AdminLTE.css' %}">
+  <link rel="stylesheet" href="{% static 'backend/dist/css/skins/_all-skins.css' %}">
+  <link rel="stylesheet" href="{% static 'backend/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'backend/bower_components/morris.js/morris.css' %}">
+  <link rel="stylesheet" href="{% static 'backend/bower_components/jvectormap/jquery-jvectormap.css' %}">
+  <link rel="stylesheet" href="{% static 'backend/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css' %}">
+  <link rel="stylesheet" href="{% static 'backend/bower_components/bootstrap-daterangepicker/daterangepicker.css' %}">
+  <link rel="stylesheet" href="{% static 'backend/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css' %}">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+{% block styles %}{% endblock %}
+
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+
+  {% include "operator/partials/header.html" %}
+  <!-- Left side column. contains the logo and sidebar -->
+  {% include 'operator/partials/sidebar.html' %}
+
+  <!-- Content Wrapper. Contains page content -->
+  {% block content %} {% endblock content %}
+  <!-- /.content-wrapper -->
+ {% include 'operator/partials/footer.html' %}
+
+  <div class="modal fade text-left" id="logout" tabindex="-1" aria-labelledby="logout" style="display: none;"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="logout">Logout</h5>
+          <button type="button" class="close rounded-pill" data-bs-dismiss="modal" aria-label="Close">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              class="feather feather-x">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>
+            Apakah anda yakin ingin keluar?
+          </p>
+        </div>
+        <div class="modal-footer">
+          <a href="/logout" class="btn btn-danger ml-1">
+            <i class="bx bx-check d-block d-sm-none"></i>
+            <span class="d-none d-sm-block">Keluar</span>
+          </a>
+          <button type="button" class="btn" data-bs-dismiss="modal">
+            <i class="bx bx-x d-block d-sm-none"></i>
+            <span class="d-none d-sm-block">Tutup</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End: App -->
+  <script src="{% static 'backend/bower_components/jquery/dist/jquery.min.js' %}"></script>
+<script src="{% static 'backend/bower_components/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'backend/bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'backend/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+<script src="{% static 'backend/bower_components/jquery-slimscroll/jquery.slimscroll.min.js' %}"></script>
+<script src="{% static 'backend/bower_components/fastclick/lib/fastclick.js' %}"></script>
+<script src="{% static 'backend/dist/js/adminlte.min.js' %}"></script>
+<script src="{% static 'backend/dist/js/demo.js' %}"></script>
+<script>
+  $(function () {
+    $('#example1').DataTable()
+    $('#example2').DataTable({
+      'paging'      : true,
+      'lengthChange': false,
+      'searching'   : false,
+      'ordering'    : true,
+      'info'        : true,
+      'autoWidth'   : false
+    })
+  })
+</script>
+  {% if messages %}
+  {% for message in messages %}
+    <script>
+        $(document).ready(function(){
+            // console.log($('#exampleInputFile').val())
+            function ops() {
+                Swal.fire(
+                    '{{message.tags}}!',
+                    '{{message}}!',
+                    '{{message.tags}}'
+                    )
+            }
+            ops();
+        });
+
+    </script>
+  {% endfor %}
+  {% endif %}
+  {% block scripts %}{% endblock %}
+
+</body>
+
+</html>

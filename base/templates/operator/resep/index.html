@@ -1,0 +1,70 @@
+{% extends 'operator/adminbase.html' %}
+{% load static %}
+
+
+{% block title %} Manajemen Resep {% endblock title %}
+{% block content %}
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Manajamen Resep
+        </h1>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+
+                <!-- /.box -->
+                <a href=""  class="btn btn-sm btn-success btn-tambah" id="btnAdd" style="margin-bottom: 20px;">
+                    <i class="fa fa-plus"></i> Tambah Jenis Barang Elektronik
+                </a>
+                <div class="box">
+                    <!-- /.box-header -->
+                    <div class="box-body">
+
+                        <table id="example1" class="table table-bordered table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>No.</th>
+                                    <th>Judul</th>
+                                    <th>Kategori</th>
+                                    <th>Thumbnail</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for resep in reseps %}
+                                <tr>
+                                    <td>{{forloop.counter}}</td>
+                                    <td>{{resep.judul}}</td>
+                                    <td>{{resep.kategori_resep}}</td>
+                                    <td>Thumb</td>
+                                    <td>
+                                        <a href=""  class="btn btn-sm btn-warning btn-tambah" id="btnAdd" >
+                                            <i class="fa fa-pencil"></i> Edit
+                                        </a>
+                                        
+                                        <button type="button" title="Hapus" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modal-default-{{ resep.id }}">
+                                            <i class="fa fa-trash" aria-hidden="true"></i> Hapus
+                                        </button>
+                                        {% include "operator/resep/hapus.html" %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+</div>
+{% endblock %}
