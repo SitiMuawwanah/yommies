@@ -1,89 +1,73 @@
 {% extends 'operator/adminbase.html' %}
-{% block content %}
 {% load static %}
+{% block content %}
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Tambah Resep
+        </h1>
+    </section>
 
-{% block styles %}
-<link rel="stylesheet" href="{% static 'assets/css/pages/form-element-select.css' %}">
-<link rel="stylesheet" href="{% static 'assets/css/pages/datatables-5.css' %}">
-{% endblock styles %}
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
 
-<div class="page-heading">
-    <h3>
-        {% block title %}
-        Manajemen Produk
-        {% endblock title %}
-    </h3>
-</div>
-
-<div class="page-content">
-    <section class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header" style="border-bottom: 1px solid rgba(0, 0, 0, 0.125);">
-                    <h4 class="card-title mb-0">Tambah Produk</h4>
-                </div>
-                <div class="card-content">
-                    <div class="card-body">
-                        <div class="tab-content" id="myTabContent">
-                            <div class="tab-pane fade show active" id="pilihanganda" role="tabpanel"
-                                aria-labelledby="pilihanganda-tab">
-                                <form class="form" method="POST" action="" autocomplete="off" enctype="multipart/form-data">
-                                    {% csrf_token %}
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <div class="form-group">
-                                                <label for="nama_produk" class="mb-2">Nama Produk</label>
-                                                <input type="text" class="form-control" required name="nama_produk">
-                                            </div>
-                                            
-                                            <div class="form-group">
-                                                <label for="kategori" class="mb-2">Kategori</label>
-                                                <select name="kategori" id="" required class="form-control">
-                                                    <option value="">---Pilih Kategori---</option>
-                                                    {% for kategori in kategoris %}
-                                                    <option value="{{kategori.id}}">{{kategori.nama_kategori}}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-
-                                            <div class="form-group mb-4">
-                                                <label for="isi" class="mb-2">Deskripsi</label>
-                                                <textarea name="deskripsi" id="editor1" required rows="10"
-                                                    cols="100"></textarea>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label for="harga" class="mb-2">Harga Produk</label>
-                                                <input type="number" class="form-control" required name="harga">
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label for="gambar" class="mb-2">Gambar</label>
-                                                <input type="file" class="form-control" accept="image/*" onchange="loadFile(event)" name="gambar">
-                                                <img id="output"/ width="20%">
-                                            </div>
-
-
-                                            <div class="col-12 d-flex justify-content-end mt-4">
-                                                <a href="{% url 'produk' %}" class="btn btn-secondary me-1 mb-1"><i class="fa fa-sign-out-alt" style="transform: rotate(180deg);"></i>&ensp;Kembali</a>
-                                                <button type="submit" class="btn btn-primary me-1 mb-1"><i class="bx bx-check d-block d-sm-none"></i>
-                                                <span class="d-none d-sm-block"><i class="fas fa-plus"></i>&nbsp;Tambah</span></button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
+                <div class="box">
+                    <div class="box-body">
+                        <form method="POST" action="" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <div><label>Judul Resep</label></div>
+                                <div>
+                                    <input class="form-control" type="text" value="" name="judul">
+                                </div>
                             </div>
-                        </div>
 
+                            <div class="form-group">
+                                <div><label>Kategori Resep</label></div>
+                                <div>
+                                    <select class="form-control" name="kategori_resep">
+                                        <option value="">---Pilih Kategori---</option>
+                                        {% for kategori in kategoris %}
+                                        <option value="{{kategori.id}}">{{kategori.judul}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div><label>Isi</label></div>
+                                <div>
+                                    <textarea name="isi" id="editor1" required rows="10"
+                                    cols="100"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div><label>Gambar</label></div>
+                                <div>
+                                    <input type="file" class="form-control" accept="image/*" onchange="loadFile(event)" name="gambar">
+                                    <img id="output"/ width="20%">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <button type="submit" title="Simpan" class="btn btn-success"><i class="fa fa-save" aria-hidden="true"></i> Simpan</button>
+                                <a class="btn btn-primary" title="Kembali" href="" role="button"><i class="fa fa-arrow-left" aria-hidden="true"></i> Kembali</a>
+                            </div>
+                        </form>
                     </div>
                 </div>
+                <!-- /.box -->
             </div>
+            <!-- /.col -->
         </div>
+        <!-- /.row -->
     </section>
+    <!-- /.content -->
 </div>
-
-
-
 {% block scripts %}
 <script src="{% static 'assets/js/extensions/jquery.js' %}"></script>
 <script src="{% static 'assets/js/extensions/form-element-select.js' %}"></script>
@@ -91,13 +75,13 @@
 <script src="{% static 'assets/js/extensions/datatables.js' %}"></script>
 <script src="{% static 'assets/js/extensions/datatables-5.js' %}"></script>
 <script type="text/javascript">
-var loadFile = function(event) {
-    var output = document.getElementById('output');
-    output.src = URL.createObjectURL(event.target.files[0]);
-    output.onload = function() {
-      URL.revokeObjectURL(output.src) // free memory
-    }
-  };
+    var loadFile = function(event) {
+        var output = document.getElementById('output');
+        output.src = URL.createObjectURL(event.target.files[0]);
+        output.onload = function() {
+URL.revokeObjectURL(output.src) // free memory
+}
+};
 </script>
 
 <script>

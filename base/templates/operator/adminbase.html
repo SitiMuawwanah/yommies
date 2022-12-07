@@ -87,24 +87,6 @@
     })
   })
 </script>
-  {% if messages %}
-  {% for message in messages %}
-    <script>
-        $(document).ready(function(){
-            // console.log($('#exampleInputFile').val())
-            function ops() {
-                Swal.fire(
-                    '{{message.tags}}!',
-                    '{{message}}!',
-                    '{{message.tags}}'
-                    )
-            }
-            ops();
-        });
-
-    </script>
-  {% endfor %}
-  {% endif %}
   {% block scripts %}{% endblock %}
 
 </body>

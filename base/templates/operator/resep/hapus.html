@@ -10,7 +10,8 @@
                 <p>Yakin ingin hapus resep {{resep.judul}}</p>
               </div>
               <div class="modal-footer">
-                <form action="" method="POST">
+                <form action="{% url 'hapus-resep' resep.id %}" method="POST">
+                  {% csrf_token %}
                  <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Batal</button>
                 <button type="submit" class="btn btn-danger">Hapus</button>
             </form>

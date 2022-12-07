@@ -78,7 +78,7 @@ def logout_view(request):
 @login_required(login_url='login')
 def resepIndex(request):
     reseps = Resep.objects.all()
-    context = {'reseps':reseps}
+    context = {'reseps':reseps,'media_url':settings.MEDIA_URL}
     return render(request,'operator/resep/index.html', context)
 
 @login_required(login_url='login')
@@ -97,16 +97,15 @@ def resepHapus(request,pk):
 
 @login_required(login_url='login')
 def resepTambah(request):
-    kategoris = Resep.objects.all()
+    kategoris = KategoriResep.objects.all()
     if request.method == 'POST':
         if request.FILES.get('gambar'):
             upload = request.FILES['gambar']
             gambar = upload.name
             Resep.objects.create(
-                nama_produk=request.POST.get('nama_produk'),
-                deskripsi=request.POST.get('deskripsi'),
-                kategori_produk_id=request.POST.get('kategori'),
-                harga=request.POST.get('harga'),
+                judul=request.POST.get('judul'),
+                isi=request.POST.get('isi'),
+                kategori_resep_id=request.POST.get('kategori_resep'),
                 gambar=gambar,
                 author=request.user,
             )
@@ -115,41 +114,39 @@ def resepTambah(request):
             file_url = fss.url(file)
         else:
             Resep.objects.create(
-                nama_produk=request.POST.get('nama_produk'),
-                deskripsi=request.POST.get('deskripsi'),
-                kategori_produk_id=request.POST.get('kategori'),
-                harga=request.POST.get('harga'),
+                judul=request.POST.get('judul'),
+                isi=request.POST.get('isi'),
+                kategori_resep_id=request.POST.get('kategori_resep'),
                 author=request.user,
             )
-        messages.success(request, "Sukses Menambah Produk." )
-        return redirect('produk')
+        messages.success(request, "Sukses Menambah Resep." )
+        return redirect('resep')
     context = {'kategoris':kategoris}
     return render(request,'operator/resep/tambah.html', context)
 
 @login_required(login_url='login')
 def resepEdit(request,pk):
-    produk = Resep.objects.get(id=pk)
-    kategoris = Resep.objects.all()
+    resep = Resep.objects.get(id=pk)
+    kategoris = KategoriResep.objects.all()
     if request.method == 'POST':
-        produk.nama_produk  = request.POST.get('nama_produk')
-        produk.deskripsi  = request.POST.get('deskripsi')
-        produk.harga  = request.POST.get('harga')
-        produk.kategori_produk_id  = request.POST.get('kategori')
-        produk.save()
+        resep.judul  = request.POST.get('judul')
+        resep.isi  = request.POST.get('isi')
+        resep.kategori_resep_id  = request.POST.get('kategori_resep')
+        resep.save()
         if request.FILES.get('gambar'):
-            if produk.gambar:
-                if os.path.isfile(produk.gambar.path):
-                    os.remove(produk.gambar.path)
+            if resep.gambar:
+                if os.path.isfile(resep.gambar.path):
+                    os.remove(resep.gambar.path)
             upload = request.FILES['gambar']
-            produk.gambar = upload.name
-            produk.save()
+            resep.gambar = upload.name
+            resep.save()
             fss = FileSystemStorage()
             file = fss.save(upload.name, upload)
             file_url = fss.url(file)
-        messages.success(request, "Sukses Mengubah Produk." )
-        return redirect('produk')
+        messages.success(request, "Sukses Mengubah Resep." )
+        return redirect('resep')
 
-    context = {'produk':produk,'kategoris':kategoris,'media_url':settings.MEDIA_URL}
+    context = {'resep':resep,'kategoris':kategoris,'media_url':settings.MEDIA_URL}
     return render(request, 'operator/resep/edit.html', context)
 
 @login_required(login_url='login')
