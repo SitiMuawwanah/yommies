@@ -7,12 +7,12 @@
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">MAIN NAVIGATION</li>
-        <li class="active treeview">
-          <a href="#">
+        <li class="{% if 'dashboard' in request.path %} active {% endif %}">
+          <a href="{% url 'dashboard' %}">
             <i class="fa fa-dashboard"></i> <span>Dashboard</span>
           </a>
         </li>
-        <li class="">
+        <li class="{% if 'resep' in request.path %} active {% endif %}">
           <a href="{% url 'resep' %}">
             <i class="fa fa-cutlery"></i>
             <span>Resep Masakan</span>

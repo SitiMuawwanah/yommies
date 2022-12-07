@@ -49,7 +49,10 @@ def dashboard(request):
 
 def loginPage(request):
     if request.user.is_authenticated:
-        return redirect('home')
+        if request.user.is_superuser == 1:
+            return redirect('dashboard')
+        else:
+            return redirect('home')
     
     if request.method == 'POST':
         username = request.POST.get('username')
