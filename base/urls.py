@@ -10,6 +10,7 @@ urlpatterns = [
 
     # OPERATOR ROUTE
     path('operator/dashboard', views.dashboard, name="dashboard"),
+    path('operator/profil', views.profil, name="profil"),
 
     # Artikel Route
     path('operator/resep', views.resepIndex, name="resep"),

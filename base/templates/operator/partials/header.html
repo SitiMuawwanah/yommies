@@ -28,14 +28,15 @@
               <!-- User image -->
               <li class="user-header">
                 <p>
-                  Alexander Pierce - Web Developer
-                  <small>Member since Nov. 2012</small>
+                  {{request.user.first_name}} {{request.user.last_name}}
+                  <small>Admin</small>
+                  <small>{{request.user}}</small>
                 </p>
               </li>
               <!-- Menu Footer-->
               <li class="user-footer">
                 <div class="pull-left">
-                  <a href="#" class="btn btn-default btn-flat">Profile</a>
+                  <a href="{% url 'profil' %}" class="btn btn-default btn-flat">Profile</a>
                 </div>
                 <div class="pull-right">
                   <a href="#" class="btn btn-default btn-flat" data-toggle="modal" data-target="#logoutModal">Sign out</a>
