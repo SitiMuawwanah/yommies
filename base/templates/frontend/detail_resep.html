@@ -3,46 +3,64 @@
 {% load static %}    
 {% block content %} 
   
-   
+   <div class="section section-lg bg-secondary">
+        <div class="container wide">
+          <div class="text-center">
+            <h1>{{resep.title}}</h1>
+            <div class="subtitle-2">✨ Yommies ✨</div>
+          </div>
+        </div>
+      </div>
+      <div class="section section-xl">
+        <div class="container wide">
+          <div class="text-center"><img src="{{resep.thumb}}" alt="" width="50%" />
+            <div class="single-prod-wrap">
+              <h2>{{resep.title}}</h2>
+              <div class="subtitle-2">{{resep.desc}}</div>
+              <!-- <p class="fz-18">Urbs cresceres, tanquam azureus fraticinida.</p> -->
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--Divider-->
+      <div class="section">
+        <div class="container wide">
+          <div class="divider"></div>
+        </div>
+      </div>
 
-    <!--====== TEAM START ======-->
-
-
-    <section id="team" class="team-area pb-30 mt-110">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-6 col-md-10">
-                    <div class="section-title text-center pb-30">
-                        <h3 class="title">{{nama_kategori|title}}</h3>
-                        <p class="text">Beberapa {{nama_kategori|title}} Yang Tersedia ✨</p>
-                    </div> <!-- section title -->
-                </div>
-            </div> <!-- row -->
-            <div class="row text-center justify-content-center">
-                {% for resep in api_resep %}
-                <div class="col-lg-4 col-sm-6">
-                    <div class="team-style-eleven text-center mt-30 wow fadeIn" data-wow-duration="1s" data-wow-delay="0s">
-                        <div class="team-image">
-                            <img src="{{resep.thumb}}" alt="Team" height="100%">
-                        </div>
-                        <div class="team-content">
-                            <div class="team-social">
-                                <ul class="social">
-                                    <li><i class="lni lni-timer"></i> {{resep.times}}</li>
-                                    <li><i class="lni lni-dinner"></i> {{resep.serving}}</li>
-                                    <li><i class="lni lni-chef-hat"></i> {{resep.difficulty}}</li>
-                                </ul>
-                            </div>
-                            <h4 class="team-name"><a href="#">{{resep.title}}</a></h4>
-                            {# <span class="sub-title">Art Director</span> #}
-                        </div>
-                    </div> <!-- single team -->
-                </div>
-                {% endfor %}
-            </div> <!-- row -->
-        </div> <!-- container -->
-    </section>
-
-    <!--====== TEAM  ENDS ======-->
-
+       <div class="section section-xl">
+        <div class="container wide">
+          <div class="row row-md-80 row-sm-50">
+            <div class="col-lg-12">
+              <div class="subtitle">Bahan & Cara Lengkap</div>
+              <h3 class="title">Bahan Yang Dibutuhkan</h3>
+              <div class="subtitle-2 big">Berikut adalah bahan - bahan yang dibutuhkan</div>
+              <div class="list-wrap">
+                <ul class="list-marked" style=" columns: 2; -webkit-columns: 2; -moz-columns: 2;">
+                    {% for ing in resep.ingredient %}
+                    <li>
+                    <p>{{ing}}</p>
+                    </li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </div> 
+            <div class="col-lg-12">
+              <h3 class="title">Cara Lengkap</h3>
+              <div class="subtitle-2 big">Berikut adalah cara lengkap pembuatannya</div>
+              <div class="list-wrap">
+                <ul class="list-marked">
+                    {% for step in resep.step %}
+                    <li>
+                    <p>{{step}}</p>
+                    </li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </div>            
+            </div>
+          </div>
+        </div>
+      </div>
 {% endblock %}

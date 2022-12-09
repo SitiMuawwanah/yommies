@@ -20,6 +20,10 @@ urlpatterns = [
     path('operator/resep/detail/<int:pk>', views.resepDetail, name="detail-resep"),
 
 
+    # USER ROUTE
+    path('resep-masakan/kategori/<str:key>', views.resepByKategori, name="resep-by-kategori"),
+    path('resep-masakan/detail-resep/<str:key>', views.detailResep, name="detail-resep-masakan"),
+
 ]
 
 if settings.DEBUG:

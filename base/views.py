@@ -15,17 +15,27 @@ import os
 import requests
 
 
-url_api = 'https://masak-apa-tomorisakura.vercel.app/api/'
+base_url = 'https://masak-apa-tomorisakura.vercel.app/api/'
 # Create your views here.
 def home(request):
-    context = {}
+    url_kategori = f'{base_url}/category/recipes/'
+    kategori = requests.get(url_kategori)
+    data = kategori.json()
+    kategori_resep = data['results']
+
+    satu_resep_new = f'{base_url}/recipes-length/?limit=1'
+    satu_resep = requests.get(satu_resep_new)
+    resep_baru = satu_resep.json()
+    new_resep = resep_baru['results']
+
+    context = {'kategori_resep':kategori_resep,'new_resep':new_resep}
     return render(request, 'frontend/home.html', context)
 
 
 def resepByKategori(request, key):
     nama_kategori = key.replace('-',' ')
     # Resep
-    url_resep_by_kategori = f'{url_api}/category/recipes/{key}'
+    url_resep_by_kategori = f'{base_url}/category/recipes/{key}'
     reseps = requests.get(url_resep_by_kategori)
     data_resep = reseps.json()
     api_resep = data_resep['results']
@@ -33,15 +43,6 @@ def resepByKategori(request, key):
     context = {'api_resep':api_resep,'media_url':settings.MEDIA_URL,'nama_kategori':nama_kategori}
     return render(request, 'frontend/resep_by_kategori.html', context)
 
-def detailResep(request, key):
-    # Resep
-    url_resep_by_kategori = f'{url_api}/recipe/{key}'
-    reseps = requests.get(url_resep_by_kategori)
-    data_resep = reseps.json()
-    api_resep = data_resep['results']
-
-    context = {'api_resep':api_resep,'media_url':settings.MEDIA_URL,'nama_kategori':nama_kategori}
-    return render(request, 'frontend/detail_resep.html', context)
 
 # @login_required(login_url='login')
 def dashboard(request):
@@ -118,6 +119,7 @@ def resepTambah(request):
         else:
             Resep.objects.create(
                 judul=request.POST.get('judul'),
+                url_youtube=request.POST.get('url_youtube'),
                 isi=request.POST.get('isi'),
                 kategori_resep_id=request.POST.get('kategori_resep'),
                 author=request.user,
@@ -134,6 +136,7 @@ def resepEdit(request,pk):
     if request.method == 'POST':
         resep.judul  = request.POST.get('judul')
         resep.isi  = request.POST.get('isi')
+        resep.url_youtube  = request.POST.get('url_youtube')
         resep.kategori_resep_id  = request.POST.get('kategori_resep')
         resep.save()
         if request.FILES.get('gambar'):
@@ -184,3 +187,13 @@ def profil(request):
     context = {'user':user,'form':form}
     return render(request, 'operator/profil.html', context)
 
+
+def detailResep(request, key):
+    # Resep
+    url_detail_resep = f'{base_url}/recipe/{key}'
+    reseps = requests.get(url_detail_resep)
+    data_resep = reseps.json()
+    resep = data_resep['results']
+
+    context = {'resep':resep,'media_url':settings.MEDIA_URL}
+    return render(request, 'frontend/detail_resep.html', context)

@@ -4,45 +4,39 @@
 {% block content %} 
   
    
-
-    <!--====== TEAM START ======-->
-
-
-    <section id="team" class="team-area pb-30 mt-110">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-6 col-md-10">
-                    <div class="section-title text-center pb-30">
-                        <h3 class="title">{{nama_kategori|title}}</h3>
-                        <p class="text">Beberapa {{nama_kategori|title}} Yang Tersedia ✨</p>
-                    </div> <!-- section title -->
+ <div class="section section-lg bg-secondary">
+        <div class="container wide">
+          <div class="text-center">
+            <h1>{{nama_kategori|title}}</h1>
+            <div class="subtitle-2">Beberapa {{nama_kategori}} yang tersedia</div>
+          </div>
+        </div>
+      </div>
+      <div class="section section section-xl">
+        <div class="container wide">
+          <div class="text-center">
+            <h2 class="subtitle">{{nama_kategori|title}}</h2>
+          </div>
+          <div class="row row-md-80 row-sm-50">
+            {% for resep in api_resep %}
+            <div class="col-xs-10 col-md-6 col-lg-4">
+              <div class="box-info-modern box-md">
+                <div class="box-info-modern-figure">
+                    <a href="{% url 'detail-resep-masakan' resep.key %}" title="{{resep.title}}"><img src="{{resep.thumb}}" alt="" width="390" height="344"/></a>
                 </div>
-            </div> <!-- row -->
-            <div class="row text-center justify-content-center">
-                {% for resep in api_resep %}
-                <div class="col-lg-4 col-sm-6">
-                    <div class="team-style-eleven text-center mt-30 wow fadeIn" data-wow-duration="1s" data-wow-delay="0s">
-                        <div class="team-image">
-                            <img src="{{resep.thumb}}" alt="Team" height="100%">
-                        </div>
-                        <div class="team-content">
-                            <div class="team-social">
-                                <ul class="social">
-                                    <li><i class="lni lni-timer"></i> {{resep.times}}</li>
-                                    <li><i class="lni lni-dinner"></i> {{resep.serving}}</li>
-                                    <li><i class="lni lni-chef-hat"></i> {{resep.difficulty}}</li>
-                                </ul>
-                            </div>
-                            <h4 class="team-name"><a href="#">{{resep.title}}</a></h4>
-                            {# <span class="sub-title">Art Director</span> #}
-                        </div>
-                    </div> <!-- single team -->
+                <div class="box-info-modern-title">
+                    <a href="{% url 'detail-resep-masakan' resep.key %}" title="{{resep.title}}">{{resep.title|slice:":30"}}...</a>
                 </div>
-                {% endfor %}
-            </div> <!-- row -->
-        </div> <!-- container -->
-    </section>
-
-    <!--====== TEAM  ENDS ======-->
+                <div class="box-info-modern-text small">
+                    <i class="icon-sm mdi mdi-alarm"></i> {{resep.times}}
+                    <i class="icon-sm mdi mdi-food"></i> {{resep.serving}}
+                    <i class="icon-sm mdi mdi-chart-areaspline"></i> {{resep.difficulty}}
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
 
 {% endblock %}

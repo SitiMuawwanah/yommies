@@ -24,6 +24,7 @@ class Resep(models.Model):
     kategori_resep     = models.ForeignKey(KategoriResep, on_delete=models.SET_NULL, null=True)
     author              = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     gambar              = models.ImageField(upload_to='images_resep/',null=True)
+    url_youtube         = models.CharField(max_length=255, null=True)
     created             = models.DateTimeField(auto_now_add=True)
     updated             = models.DateTimeField(auto_now=True)
     slug                = models.SlugField(blank=True, editable=False)
