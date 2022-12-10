@@ -13,7 +13,7 @@
                 <p class="lead text-custom-blue" data-caption-animate="fadeInUp" data-caption-delay="250">Resep Masakan Mudah & Praktis</p>
                 <div class="btn-wrap">
                   <div class="group-xxl group-middle">
-                    <a class="button button-white button-md button-round-2" href="#" data-caption-animate="fadeInUp" data-caption-delay="450">Daftar Sekarang</a></div>
+                    <a class="button button-white button-md button-round-2" href="{% url 'register' %}" data-caption-animate="fadeInUp" data-caption-delay="450">Daftar Sekarang</a></div>
                 </div>
                 <p class="text-custom-blue">Siti Muawwanah - 2011102441153</p>
               </div>
@@ -86,12 +86,56 @@
           </div>
         </div>
       </div>
+      <!--Divider-->
+      <div class="section">
+        <div class="container wide">
+          <div class="divider"></div>
+        </div>
+      </div>
+      <section class="section section-lg bg-default text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <!--Bootstrap tabs-->
+                <div class="tabs-vertical tabs-corporate ">
+                    <div class="tab-content">
+                        <div class="section">
+                            <div class="container wide">
+                                <div class="row row-md-80 row-sm-50">
+                                    {% for resep in resep_by_yommies %}
+                                    <div class="col-xs-12 col-md-6 col-lg-4">
+                                        <div class="box-info-modern box-md">
+                                            <div class="box-info-modern-figure">
+                                                <a href="{% url 'detail-resep-masakan' resep.key %}" title="{{resep.title}}"><img src="{{media_url}}{{resep.thumb}}" alt="" width="390" height="344"/></a>
+                                            </div>
+                                            <div class="box-info-modern-title">
+                                                <a href="{% url 'detail-resep-masakan' resep.key %}" title="{{resep.title}}">{{resep.title|slice:":20"}}...</a>
+                                            </div>
+                                            <div class="box-info-modern-text small">
+                                                <i class="icon-sm mdi mdi-alarm"></i> {{resep.times}}
+                                                <i class="icon-sm mdi mdi-food"></i> {{resep.serving}}
+                                                <i class="icon-sm mdi mdi-chart-areaspline"></i> {{resep.difficulty}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
       <div class="section section-custom">
         <div class="container wide">
           <div class="text-center">
             <h2 class="title">Ingin Melihat  <br class="br-none"> Resep Lengkap?</h2>
             <div class="subtitle-2 big">Silakan klik tombol dibawah, ya✨</div>
-            <div class="row justify-content-center mb-5"><a class="button button-secondary button-md" href="#">Lihat Resep</a></div>
+            <div class="row justify-content-center mb-5"><a class="button button-secondary button-md" href="{% url 'resep-full' %}">Lihat Resep</a></div>
           
           </div>
         </div>

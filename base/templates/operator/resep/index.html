@@ -2,13 +2,13 @@
 {% load static %}
 
 
-{% block title %} Manajemen Resep {% endblock title %}
+
 {% block content %}
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            Manajamen Resep
+            {% block title %} Manajemen Resep {% endblock title %}
         </h1>
     </section>
 
@@ -48,9 +48,9 @@
                                 {% for resep in reseps %}
                                 <tr>
                                     <td>{{forloop.counter}}</td>
-                                    <td>{{resep.judul}}</td>
+                                    <td>{{resep.title}}</td>
                                     <td>{{resep.kategori_resep}}</td>
-                                    <td><img src="{{media_url}}{{resep.gambar}}" width="20%"></td>
+                                    <td><img src="{{media_url}}{{resep.thumb}}" width="20%"></td>
                                     <td>
                                         <a href="{% url 'edit-resep' resep.id %}"  class="btn btn-sm btn-warning btn-tambah" id="btnAdd" >
                                             <i class="fa fa-pencil"></i> Edit

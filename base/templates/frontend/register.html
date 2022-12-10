@@ -1,0 +1,42 @@
+{% extends 'main.html' %} 
+
+{% load static %}    
+{% block content %} 
+  <!--Forms-->
+      <section class="section section-md bg-default text-center">
+        <div class="container">
+          <div class="row justify-content-md-center">
+            <div class="col-md-9 col-lg-7 col-xl-5">
+              <h3>Register Akun</h3>
+              <div class="text-decoration-lines"><span class="text-decoration-lines-content">use</span></div>
+              <!--RD Mailform-->
+              <form class="rd-form rd-form-centered" method="POST" action="">
+                {% csrf_token %}
+                <div class="form-wrap">
+                  <input class="form-input" id="nama_depan" type="text" name="first_name" data-constraints="@Required">
+                  <label class="form-label" for="nama_depan">Nama Depan</label>
+                </div>
+                <div class="form-wrap">
+                  <input class="form-input" id="nama_belakang" type="text" name="last_name" data-constraints="@Required">
+                  <label class="form-label" for="nama_belakang">Nama Belakang</label>
+                </div>
+                <div class="form-wrap">
+                  <input class="form-input" id="username" type="text" name="username" data-constraints="@Required">
+                  <label class="form-label" for="username">Username</label>
+                </div>
+                <div class="form-wrap">
+                  <input class="form-input" id="login-password1" type="password" name="{{form.password1.name}}" data-constraints="@Required">
+                  <label class="form-label" for="login-password1">Password</label>
+                </div>
+                <div class="form-wrap">
+                  <input class="form-input" id="login-password2" type="password" name="{{form.password2.name}}" data-constraints="@Required">
+                  <label class="form-label" for="login-password2">Konfirmasi Password</label>
+                </div>
+                <button class="button button-block button-primary" type="submit">Register</button>
+              </form>
+            </div>
+          </div>
+          <p>Sudah punya akun? <a href="{% url 'login' %}">Login disini</a></p>
+        </div>
+      </section>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends 'main.html' %} 
+
+{% load static %}    
+{% block content %} 
+
+<!--Vertical Tabs-->
+ <div class="section section-lg bg-secondary">
+        <div class="container wide">
+          <div class="text-center">
+            <h1>Resep Yommies✨</h1>
+            <div class="subtitle-2">Beberapa resep yang tersedia, silakan pilih sesuai kategori jika ingin lebih detail</div>
+          </div>
+        </div>
+      </div>
+<section class="section section-lg bg-default text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <!--Bootstrap tabs-->
+                <div class="tabs-vertical tabs-corporate ">
+                    <!--Nav tabs-->
+                    <ul class="nav nav-tabs">
+                        {% for kategori in kategori_resep %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'resep-by-kategori' kategori.key %}">{{kategori.category}}</a></li>
+                        {% endfor %}
+                    </ul>
+                    <!--Tab panes-->
+                    <div class="tab-content">
+                        <div class="section">
+                            <div class="container wide">
+                                <div class="row row-md-80 row-sm-50">
+                                    {% for resep in api_resep %}
+                                    <div class="col-xs-10 col-md-6 col-lg-4">
+                                        <div class="box-info-modern box-md">
+                                            <div class="box-info-modern-figure">
+                                                <a href="{% url 'detail-resep-masakan' resep.key %}" title="{{resep.title}}"><img src="{{resep.thumb}}" alt="" width="390" height="344"/></a>
+                                            </div>
+                                            <div class="box-info-modern-title">
+                                                <a href="{% url 'detail-resep-masakan' resep.key %}" title="{{resep.title}}">{{resep.title|slice:":20"}}...</a>
+                                            </div>
+                                            <div class="box-info-modern-text small">
+                                                <i class="icon-sm mdi mdi-alarm"></i> {{resep.times}}
+                                                <i class="icon-sm mdi mdi-food"></i> {{resep.serving}}
+                                                <i class="icon-sm mdi mdi-chart-areaspline"></i> {{resep.difficulty}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<hr>
+
+{% endblock %}

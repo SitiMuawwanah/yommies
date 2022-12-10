@@ -13,10 +13,15 @@
       </div>
       <div class="section section-xl">
         <div class="container wide">
-          <div class="text-center"><img src="{{resep.thumb}}" alt="" width="50%" />
+          <div class="text-center">
+            {% if from_api == 1 %}
+            <img src="{{resep.thumb}}" alt="" width="50%" />
+            {% else %}
+            <img src="{{media_url}}{{resep.thumb}}" alt="" width="50%" />
+            {% endif %}
             <div class="single-prod-wrap">
               <h2>{{resep.title}}</h2>
-              <div class="subtitle-2">{{resep.desc}}</div>
+              <div class="subtitle-2">{{resep.desc|safe}}</div>
               <!-- <p class="fz-18">Urbs cresceres, tanquam azureus fraticinida.</p> -->
             </div>
           </div>
@@ -29,6 +34,16 @@
         </div>
       </div>
 
+       {% if resep.url_youtube != None %}
+            <div class="col-lg-12 text-center mt-5">
+              <h3 class="title">Video</h3>
+              <div class="subtitle-2 big">Berikut adalah video pembuatan</div>
+              <div class="list-wrap">
+               <iframe width="560" height="315" src="https://www.youtube.com/embed/{{url_youtube}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+              </div>
+            </div>      
+            {% endif %} 
+
        <div class="section section-xl">
         <div class="container wide">
           <div class="row row-md-80 row-sm-50">
@@ -38,11 +53,19 @@
               <div class="subtitle-2 big">Berikut adalah bahan - bahan yang dibutuhkan</div>
               <div class="list-wrap">
                 <ul class="list-marked" style=" columns: 2; -webkit-columns: 2; -moz-columns: 2;">
+                  {% if resep.is_from_api == 1 %}
                     {% for ing in resep.ingredient %}
                     <li>
                     <p>{{ing}}</p>
                     </li>
                   {% endfor %}
+                  {% else %}
+                    {% for ing in ingredient %}
+                    <li>
+                    <p>{{ing}}</p>
+                    </li>
+                    {% endfor %}
+                  {% endif %}
                 </ul>
               </div>
             </div> 
@@ -51,14 +74,23 @@
               <div class="subtitle-2 big">Berikut adalah cara lengkap pembuatannya</div>
               <div class="list-wrap">
                 <ul class="list-marked">
+                  {% if resep.is_from_api == 1 %}
                     {% for step in resep.step %}
                     <li>
                     <p>{{step}}</p>
                     </li>
                   {% endfor %}
+                  {% else %}
+                  {% for langkah in step %}
+                    <li>
+                    <p>{{langkah}}</p>
+                    </li>
+                  {% endfor %}
+                  {% endif %}
                 </ul>
               </div>
-            </div>            
+            </div>  
+                
             </div>
           </div>
         </div>

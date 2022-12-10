@@ -7,7 +7,7 @@
                 <h4 class="modal-title">Menghapus Resep</h4>
               </div>
               <div class="modal-body">
-                <p>Yakin ingin hapus resep {{resep.judul}}</p>
+                <p>Yakin ingin hapus resep {{resep.title}}</p>
               </div>
               <div class="modal-footer">
                 <form action="{% url 'hapus-resep' resep.id %}" method="POST">

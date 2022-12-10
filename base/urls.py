@@ -6,6 +6,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('', views.home, name="home"),
     path('login/', views.loginPage, name="login"),
+    path('register-akun/', views.registerPage, name="register"),
     path('logout', views.logout_view, name='logout'),
 
     # OPERATOR ROUTE
@@ -21,6 +22,9 @@ urlpatterns = [
 
 
     # USER ROUTE
+    path('profil/', views.profilUser, name="profil-user"),
+    path('resep-masakan/', views.resepFull, name="resep-full"),
+    path('tentang-saya/', views.tentang, name="tentang-saya"),
     path('resep-masakan/kategori/<str:key>', views.resepByKategori, name="resep-by-kategori"),
     path('resep-masakan/detail-resep/<str:key>', views.detailResep, name="detail-resep-masakan"),
 
