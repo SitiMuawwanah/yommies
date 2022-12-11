@@ -27,10 +27,19 @@ def home(request):
     satu_resep = requests.get(satu_resep_new)
     resep_baru = satu_resep.json()
     new_resep = resep_baru['results']
-
     resep_by_yommies = Resep.objects.filter(is_from_api=0)[:9]
 
-    context = {'kategori_resep':kategori_resep,'new_resep':new_resep,'resep_by_yommies':resep_by_yommies,'media_url':settings.MEDIA_URL}
+    search = request.GET.get('search')
+    if request.GET.get('search'):
+        # Cari dari api
+        url_cari = f'{base_url}/search/?q={search}'
+        cari = requests.get(url_cari)
+        data = cari.json()
+        resep_cari_api = data['results']
+        resep_cari_yommies = Resep.objects.filter(title__icontains=request.GET.get('search'),is_from_api=0)[:9]
+        context = {'kategori_resep':kategori_resep,'new_resep':new_resep,'resep_by_yommies':resep_by_yommies,'media_url':settings.MEDIA_URL,'resep_cari_api':resep_cari_api,'resep_cari_yommies':resep_cari_yommies,'search':search}
+    else:
+        context = {'kategori_resep':kategori_resep,'new_resep':new_resep,'resep_by_yommies':resep_by_yommies,'media_url':settings.MEDIA_URL,'search':search}
     return render(request, 'frontend/home.html', context)
 
 

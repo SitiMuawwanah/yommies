@@ -25,7 +25,7 @@
                     <a href="{% url 'detail-resep-masakan' resep.key %}" title="{{resep.title}}"><img src="{{resep.thumb}}" alt="" width="390" height="344"/></a>
                 </div>
                 <div class="box-info-modern-title">
-                    <a href="{% url 'detail-resep-masakan' resep.key %}" title="{{resep.title}}">{{resep.title|slice:":30"}}...</a>
+                    <a href="{% url 'detail-resep-masakan' resep.key %}" title="{{resep.title}}">{{resep.title|slice:":25"}}...</a>
                 </div>
                 <div class="box-info-modern-text small">
                     <i class="icon-sm mdi mdi-alarm"></i> {{resep.times}}

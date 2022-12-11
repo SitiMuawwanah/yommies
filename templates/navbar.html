@@ -42,6 +42,17 @@
                       <li class="rd-nav-item {% if 'tentang-saya/' in request.path %} active {% endif %}"><a class="rd-nav-link" href="{% url 'tentang-saya' %}">Profil</a>
                       {% endif %}
                       </li>
+
+                      <li class="rd-nav-item">
+                        <div class="row">
+                        <form action="{% url 'home' %}" method="GET" class="form-inline">
+                          <input type="search" name="search" class="form-control" placeholder="Cari Resep...">
+                        &nbsp;
+                        <button class="button button-secondary" type="submit" style="margin-top: 0; padding: 10px; height: 42px;"><i class="mdi mdi-magnify"></i></button>
+                        </form>
+                      </div>
+                      </li>
+
                     </ul>
                   </div>
                 </div>

@@ -21,6 +21,90 @@
           </div>
         </div>
       </div>
+
+      {% if search %}
+      <section class="section section-lg bg-default text-center">
+        <div class="container">
+          <div class="text-center">
+            <h2 class="title">Resep Pilihan Yommies</h2>
+            <div class="subtitle-2">Pilihan Resep Dari Admin Yommies ✨</div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <!--Bootstrap tabs-->
+              <div class="tabs-vertical tabs-corporate ">
+                <div class="tab-content">
+                  <div class="section">
+                    <div class="container wide">
+                      <div class="row row-md-80 row-sm-50">
+                        {% for cari_yommies in resep_cari_yommies %}
+                        <div class="col-xs-12 col-md-6 col-lg-4">
+                          <div class="box-info-modern box-md">
+                            <div class="box-info-modern-figure">
+                              <a href="{% url 'detail-resep-masakan' cari_yommies.key %}" title="{{cari_yommies.title}}"><img src="{{media_url}}{{cari_yommies.thumb}}" alt="" width="390" height="344"/></a>
+                            </div>
+                            <div class="box-info-modern-title">
+                              <a href="{% url 'detail-resep-masakan' cari_yommies.key %}" title="{{cari_yommies.title}}">{{cari_yommies.title|slice:":20"}}...</a>
+                            </div>
+                            <div class="box-info-modern-text small">
+                              <i class="icon-sm mdi mdi-alarm"></i> {{cari_yommies.times}}
+                              <i class="icon-sm mdi mdi-food"></i> {{cari_yommies.serving}}
+                              <i class="icon-sm mdi mdi-chart-areaspline"></i> {{cari_yommies.difficulty}}
+                            </div>
+                          </div>
+                        </div>
+                        {% endfor %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-lg bg-default text-center">
+        <div class="container">
+          <div class="text-center">
+            <h2 class="title">Resep Yang Cocok</h2>
+            <div class="subtitle-2">Pilihan Resep Dari Pencarian Anda ✨</div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <!--Bootstrap tabs-->
+              <div class="tabs-vertical tabs-corporate ">
+                <div class="tab-content">
+                  <div class="section">
+                    <div class="container wide">
+                      <div class="row row-md-80 row-sm-50">
+                        {% for resep in resep_cari_api %}
+                        <div class="col-xs-12 col-md-6 col-lg-4">
+                          <div class="box-info-modern box-md">
+                            <div class="box-info-modern-figure">
+                              <a href="{% url 'detail-resep-masakan' resep.key %}" title="{{resep.title}}"><img src="{{resep.thumb}}" alt="" width="390" height="344"/></a>
+                            </div>
+                            <div class="box-info-modern-title">
+                              <a href="{% url 'detail-resep-masakan' resep.key %}" title="{{resep.title}}">{{resep.title|slice:":20"}}...</a>
+                            </div>
+                            <div class="box-info-modern-text small">
+                              <i class="icon-sm mdi mdi-alarm"></i> {{resep.times}}
+                              <i class="icon-sm mdi mdi-food"></i> {{resep.serving}}
+                              <i class="icon-sm mdi mdi-chart-areaspline"></i> {{resep.difficulty}}
+                            </div>
+                          </div>
+                        </div>
+                        {% endfor %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      {% else %}
      
       <!--How Works-->
       <div class="section section section-lg">
@@ -122,8 +206,6 @@
                                 </div>
                             </div>
                         </div>
-
-
                     </div>
                 </div>
             </div>
@@ -140,4 +222,6 @@
           </div>
         </div>
       </div>
+
+      {% endif %}
 {% endblock %}
