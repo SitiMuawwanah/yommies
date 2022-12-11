@@ -7,7 +7,9 @@ import datetime
 # Create your models here.
 
 class KategoriResep(models.Model):
-    judul = models.CharField(max_length=255)
+    category = models.CharField(max_length=255,null=True)
+    key = models.CharField(max_length=255,null=True)
+    is_from_api = models.BooleanField(null=True)
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -15,8 +17,16 @@ class KategoriResep(models.Model):
     # class Meta:
     #     ordering = ['-updated', '-created']
 
+    def save(self, **kwargs):
+        self.key = slugify(self.category)
+        super().save()
+
+    def get_absolute_url(self):
+        url_slug = {'key':self.key}
+        return reverse('kategori', kwargs = url_slug)
+        
     def __str__(self):
-        return self.judul
+        return self.category
 
 class Resep(models.Model):
     title               = models.CharField(max_length=255,null=True)
@@ -50,3 +60,16 @@ class Resep(models.Model):
         
     def __str__(self):
         return self.title
+
+
+class KomentarResep(models.Model):
+    key_resep = models.CharField(max_length=255,null=True)
+    komentar = models.TextField(null=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+
+    created = models.DateTimeField(auto_now_add=True)
+
+    # class Meta:
+    #     ordering = ['-updated', '-created']
+    def __str__(self):
+        return self.key_resep

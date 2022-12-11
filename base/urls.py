@@ -13,12 +13,18 @@ urlpatterns = [
     path('operator/dashboard', views.dashboard, name="dashboard"),
     path('operator/profil', views.profil, name="profil"),
 
-    # Artikel Route
+    # Resep Route
     path('operator/resep', views.resepIndex, name="resep"),
     path('operator/resep/tambah', views.resepTambah, name="tambah-resep"),
     path('operator/resep/hapus/<int:pk>', views.resepHapus, name="hapus-resep"),
     path('operator/resep/edit/<int:pk>', views.resepEdit, name="edit-resep"),
     path('operator/resep/detail/<int:pk>', views.resepDetail, name="detail-resep"),
+
+    # Kategori Resep Route
+    path('operator/kategori-resep', views.kategoriIndex, name="kategori"),
+    path('operator/kategori-resep/tambah', views.kategoriTambah, name="tambah-kategori"),
+    path('operator/kategori-resep/hapus/<int:pk>', views.kategoriHapus, name="hapus-kategori"),
+    path('operator/kategori-resep/edit/<int:pk>', views.kategoriEdit, name="edit-kategori"),
 
 
     # USER ROUTE

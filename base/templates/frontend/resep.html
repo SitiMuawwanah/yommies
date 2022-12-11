@@ -23,6 +23,9 @@
                         {% for kategori in kategori_resep %}
                         <li class="nav-item"><a class="nav-link" href="{% url 'resep-by-kategori' kategori.key %}">{{kategori.category}}</a></li>
                         {% endfor %}
+                        {% for kat_resep in kategoris %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'resep-by-kategori' kat_resep.key %}">{{kat_resep.category}}</a></li>
+                        {% endfor %}
                     </ul>
                     <!--Tab panes-->
                     <div class="tab-content">

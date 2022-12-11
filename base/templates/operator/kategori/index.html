@@ -1,0 +1,77 @@
+{% extends 'operator/adminbase.html' %}
+{% load static %}
+
+
+
+{% block content %}
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            {% block title %} Manajemen Kategori Resep {% endblock title %}
+        </h1>
+    </section>
+
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+
+                <!-- /.box -->
+                <a href="{% url 'tambah-kategori' %}"  class="btn btn-sm btn-success btn-tambah" id="btnAdd" style="margin-bottom: 20px;">
+                    <i class="fa fa-plus"></i> Tambah Kategori
+                </a>
+                {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-{{message.tags}} alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    {{message}}
+                </div>
+                {% endfor %}
+                {% endif %}
+                <div class="box">
+                    <!-- /.box-header -->
+                    <div class="box-body">
+
+                        <table id="example1" class="table table-bordered table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>No.</th>
+                                    <th>Kategori</th>
+                                    <th>Key</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for kategori in kategoris %}
+                                <tr>
+                                    <td>{{forloop.counter}}</td>
+                                    <td>{{kategori.category}}</td>
+                                    <td>{{kategori.key}}</td>
+                                    <td>
+                                        <a href="{% url 'edit-kategori' kategori.id %}"  class="btn btn-sm btn-warning btn-tambah" id="btnAdd" >
+                                            <i class="fa fa-pencil"></i> Edit
+                                        </a>
+                                        
+                                        <button type="button" title="Hapus" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modal-default-{{ kategori.id }}">
+                                            <i class="fa fa-trash" aria-hidden="true"></i> Hapus
+                                        </button>
+                                        {% include "operator/kategori/hapus.html" %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+</div>
+{% endblock %}

@@ -55,18 +55,25 @@ def resepFull(request):
     data_resep = reseps.json()
     api_resep = data_resep['results']
 
-    context = {'api_resep':api_resep,'media_url':settings.MEDIA_URL,'kategori_resep':kategori_resep}
+    kategoris = KategoriResep.objects.all()
+
+    context = {'api_resep':api_resep,'media_url':settings.MEDIA_URL,'kategori_resep':kategori_resep,'kategoris':kategoris}
     return render(request, 'frontend/resep.html', context)
 
 def resepByKategori(request, key):
     nama_kategori = key.replace('-',' ')
     # Resep
-    url_resep_by_kategori = f'{base_url}/category/recipes/{key}'
-    reseps = requests.get(url_resep_by_kategori)
-    data_resep = reseps.json()
-    api_resep = data_resep['results']
+    kategori = KategoriResep.objects.filter(key=key).exists()
+    if kategori == False:
+        url_resep_by_kategori = f'{base_url}/category/recipes/{key}'
+        reseps = requests.get(url_resep_by_kategori)
+        data_resep = reseps.json()
+        api_resep = data_resep['results']
+    else:
+        kategori_resep = KategoriResep.objects.get(key=key)
+        api_resep = Resep.objects.filter(kategori_resep_id=kategori_resep.id)
 
-    context = {'api_resep':api_resep,'media_url':settings.MEDIA_URL,'nama_kategori':nama_kategori}
+    context = {'api_resep':api_resep,'media_url':settings.MEDIA_URL,'nama_kategori':nama_kategori,'kategori':kategori}
     return render(request, 'frontend/resep_by_kategori.html', context)
 
 
@@ -136,7 +143,7 @@ def logout_view(request):
     return redirect('login')
 
 
-# Produk Views
+# Resep Views
 @login_required(login_url='login')
 def resepIndex(request):
     reseps = Resep.objects.all()
@@ -236,6 +243,46 @@ def resepDetail(request,pk):
     context = {'artikel':artikel,'kategoris':kategoris}
     return render(request, 'operator/resep/detail.html', context)
 
+# Kategori Views
+@login_required(login_url='login')
+def kategoriIndex(request):
+    kategoris = KategoriResep.objects.all()
+    context = {'kategoris':kategoris}
+    return render(request,'operator/kategori/index.html', context)
+
+@login_required(login_url='login')
+def kategoriHapus(request,pk):
+    kategori = KategoriResep.objects.get(id=pk)
+    if request.method == 'POST':
+        kategori.delete()
+        messages.success(request, "Sukses Menghapus Kategori." )
+        return redirect('kategori')
+    else:
+        messages.error(request, 'Terdapat Error Saat Hapus Kategori. Pastikan Data Yang Ingin Dihapus Tidak Terkait Dengan Data Lain!', extra_tags="danger")
+    return render(request, 'operator/kategori/hapus.html', {'obj':kategori})
+
+@login_required(login_url='login')
+def kategoriTambah(request):
+    if request.method == 'POST':
+        KategoriResep.objects.create(
+            category=request.POST.get('category'),
+        )
+        messages.success(request, "Sukses Menambah Kategori." )
+        return redirect('kategori')
+    context = {}
+    return render(request,'operator/kategori/tambah.html', context)
+
+@login_required(login_url='login')
+def kategoriEdit(request,pk):
+    kategori = KategoriResep.objects.get(id=pk)
+    if request.method == 'POST':
+        kategori.category  = request.POST.get('category')
+        kategori.save()
+        messages.success(request, "Sukses Mengubah Kategori." )
+        return redirect('kategori')
+
+    context = {'kategori':kategori}
+    return render(request, 'operator/kategori/edit.html', context)
 
 # EDIT PROFIl
 @login_required(login_url='home')
@@ -263,6 +310,7 @@ def profil(request):
 
 
 def detailResep(request, key):
+    komentars = KomentarResep.objects.filter(key_resep=key)
     # Resep
     if Resep.objects.filter(key=key).exists() == False:
         from_api = 1
@@ -284,7 +332,15 @@ def detailResep(request, key):
         else:
             url_youtube = ""
 
-    context = {'resep':resep,'media_url':settings.MEDIA_URL,'ingredient':ingredient,'step':step,'url_youtube':url_youtube,'from_api':from_api}
+    if request.method == 'POST':
+        KomentarResep.objects.create(
+            key_resep = key,
+            user=request.user,
+            komentar=request.POST.get('komentar')
+        )
+        messages.success(request, "Komentar Berhasil Dikirim." )
+        return redirect(request.META.get('HTTP_REFERER'))
+    context = {'resep':resep,'media_url':settings.MEDIA_URL,'ingredient':ingredient,'step':step,'url_youtube':url_youtube,'from_api':from_api,'komentars':komentars}
     return render(request, 'frontend/detail_resep.html', context)
 
 def tentang(request):

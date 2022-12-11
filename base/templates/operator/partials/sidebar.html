@@ -12,12 +12,19 @@
             <i class="fa fa-dashboard"></i> <span>Dashboard</span>
           </a>
         </li>
+        <li class="{% if 'kategori-resep' in request.path %} active {% endif %}">
+          <a href="{% url 'kategori' %}">
+            <i class="fa fa-cutlery"></i>
+            <span>Kategori Resep</span>
+          </a>
+        </li>
         <li class="{% if 'resep' in request.path %} active {% endif %}">
           <a href="{% url 'resep' %}">
             <i class="fa fa-cutlery"></i>
             <span>Resep Masakan</span>
           </a>
         </li>
+        
       </ul>
     </section>
     <!-- /.sidebar -->
