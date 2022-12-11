@@ -190,7 +190,13 @@
                                     <div class="col-xs-12 col-md-6 col-lg-4">
                                         <div class="box-info-modern box-md">
                                             <div class="box-info-modern-figure">
-                                                <a href="{% url 'detail-resep-masakan' resep.key %}" title="{{resep.title}}"><img src="{{media_url}}{{resep.thumb}}" alt="" width="390" height="344"/></a>
+                                                <a href="{% url 'detail-resep-masakan' resep.key %}" title="{{resep.title}}">
+                                                  {% if resep.thumb != NULL %}
+                                                  <img src="{{media_url}}{{resep.thumb}}" alt="" width="390" height="344"/>
+                                                  {% else %}
+                                                  <img src="{% static 'frontend/images/default-image.png' %}" alt="" style="height: 213px;" />
+                                                  {% endif %}
+                                                </a>
                                             </div>
                                             <div class="box-info-modern-title">
                                                 <a href="{% url 'detail-resep-masakan' resep.key %}" title="{{resep.title}}">{{resep.title|slice:":20"}}...</a>

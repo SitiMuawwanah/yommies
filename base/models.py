@@ -73,3 +73,19 @@ class KomentarResep(models.Model):
     #     ordering = ['-updated', '-created']
     def __str__(self):
         return self.key_resep
+
+class Bookmarks(models.Model):
+    key_resep = models.CharField(max_length=255,null=True)
+    title_resep = models.CharField(max_length=255,null=True)
+    thumb_resep = models.CharField(max_length=255,null=True)
+    times_resep = models.CharField(max_length=255,null=True)
+    serving_resep = models.CharField(max_length=255,null=True)
+    difficulty_resep = models.CharField(max_length=255,null=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+
+    created = models.DateTimeField(auto_now_add=True)
+
+    # class Meta:
+    #     ordering = ['-updated', '-created']
+    def __str__(self):
+        return self.title_resep

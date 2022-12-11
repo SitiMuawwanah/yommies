@@ -9,6 +9,26 @@
             <h1>{{resep.title}}</h1>
             <div class="subtitle-2">✨ Yommies ✨</div>
           </div>
+
+        </div>
+        <div class="text-center mt-4"> 
+          {% if bookmark == False %}
+          <form action="" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="key_bookmarks" value="{{key}}">
+            <button class="text-center button button-secondary" type="submit">
+              <i class="mdi mdi-bookmark-plus"></i>&nbsp;Tambah ke Bookmarks
+            </button>
+          </form>
+          {% else %}
+          <form action="" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="key_unbookmarks" value="{{key}}">
+            <button class="text-center button button-secondary" type="submit">
+              <i class="mdi mdi-bookmark-remove"></i>&nbsp;Hapus Dari Bookmarks
+            </button>
+          </form>
+          {% endif %}
         </div>
       </div>
       <div class="section section-xl">
@@ -19,6 +39,7 @@
             {% else %}
             <img src="{{media_url}}{{resep.thumb}}" alt="" width="50%" />
             {% endif %}
+
             <div class="single-prod-wrap">
               <h2>{{resep.title}}</h2>
               <div class="subtitle-2">{{resep.desc|safe}}</div>

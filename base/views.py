@@ -55,6 +55,28 @@ def resepFull(request):
     data_resep = reseps.json()
     api_resep = data_resep['results']
 
+    # for resep in api_resep:
+    #     if Resep.objects.filter(key=resep['key']).exists() == False:
+    #         Resep.objects.create(
+    #             title=resep['title'],
+    #             key=resep['key'],
+    #             thumb=resep['thumb'],
+    #             serving=resep['serving'],
+    #             times=resep['times'],
+    #             difficulty=resep['difficulty'],
+    #             is_from_api=1
+    #         )
+    #     else:
+    #         Resep.objects.filter(key=resep['key']).update(
+    #             title=resep['title'],
+    #             key=resep['key'],
+    #             thumb=resep['thumb'],
+    #             serving=resep['serving'],
+    #             times=resep['times'],
+    #             difficulty=resep['difficulty'],
+    #             is_from_api=1
+    #         )
+
     kategoris = KategoriResep.objects.all()
 
     context = {'api_resep':api_resep,'media_url':settings.MEDIA_URL,'kategori_resep':kategori_resep,'kategoris':kategoris}
@@ -77,7 +99,7 @@ def resepByKategori(request, key):
     return render(request, 'frontend/resep_by_kategori.html', context)
 
 
-# @login_required(login_url='login')
+@login_required(login_url='login')
 def dashboard(request):
     return render(request,'operator/dashboard.html')
 
@@ -311,6 +333,7 @@ def profil(request):
 
 def detailResep(request, key):
     komentars = KomentarResep.objects.filter(key_resep=key)
+    bookmark = Bookmarks.objects.filter(key_resep=key,user=request.user).exists()
     # Resep
     if Resep.objects.filter(key=key).exists() == False:
         from_api = 1
@@ -333,14 +356,30 @@ def detailResep(request, key):
             url_youtube = ""
 
     if request.method == 'POST':
-        KomentarResep.objects.create(
-            key_resep = key,
-            user=request.user,
-            komentar=request.POST.get('komentar')
-        )
-        messages.success(request, "Komentar Berhasil Dikirim." )
+        if request.POST.get('komentar'):
+            KomentarResep.objects.create(
+                key_resep = key,
+                user=request.user,
+                komentar=request.POST.get('komentar')
+            )
+            messages.success(request, "Komentar Berhasil Dikirim.")
+        elif request.POST.get('key_bookmarks'):
+            url_resep_detail = f'{base_url}/recipe/{key}'
+            resepnya = requests.get(url_resep_detail)
+            datanya = resepnya.json()
+            result = datanya['results']
+            Bookmarks.objects.create(
+                key_resep = key,
+                title_resep=result['title'],
+                times_resep=result['times'],
+                difficulty_resep=result['difficulty'],
+                thumb_resep=result['thumb'],
+                serving_resep=result['servings'],
+                user=request.user,
+            )
+            messages.success(request, "Bookmark Berhasil Ditambahkan ✅")
         return redirect(request.META.get('HTTP_REFERER'))
-    context = {'resep':resep,'media_url':settings.MEDIA_URL,'ingredient':ingredient,'step':step,'url_youtube':url_youtube,'from_api':from_api,'komentars':komentars}
+    context = {'resep':resep,'media_url':settings.MEDIA_URL,'ingredient':ingredient,'step':step,'url_youtube':url_youtube,'from_api':from_api,'komentars':komentars,'key':key,'bookmark':bookmark}
     return render(request, 'frontend/detail_resep.html', context)
 
 def tentang(request):
@@ -349,5 +388,23 @@ def tentang(request):
 
 def profilUser(request):
     user = request.user
-    context = {}
-    return render(request, 'frontend/tentang.html', context)
+    form = forms.UserForm(instance=user)
+
+    if request.method == 'POST':
+        form = forms.UserForm(request.POST, instance=user)
+        user.first_name = request.POST.get('first_name')
+        user.last_name = request.POST.get('last_name')
+        user.username = request.POST.get('username')
+        if request.POST.get('password1'):
+            if request.POST.get('password1') == request.POST.get('password2'):
+                user.set_password(request.POST.get('password1'))
+            else:
+                 messages.error(request, "Password & Konfirmasi Password Harus Sama.", extra_tags="danger" )
+                 return redirect(request.META.get('HTTP_REFERER'))
+        user.save()
+        messages.success(request, "Sukses Mengubah Profil." )
+        return redirect(request.META.get('HTTP_REFERER'))
+
+    bookmarks = Bookmarks.objects.filter(user=request.user)
+    context = {'bookmarks':bookmarks}
+    return render(request, 'frontend/profil.html', context)

@@ -39,7 +39,7 @@
                       <li class="rd-nav-item {% if 'tentang-saya/' in request.path %} active {% endif %}"><a class="rd-nav-link" href="{% url 'tentang-saya' %}">Tentang</a>
                       </li>
                       {% if request.user.is_authenticated %}
-                      <li class="rd-nav-item {% if 'tentang-saya/' in request.path %} active {% endif %}"><a class="rd-nav-link" href="{% url 'tentang-saya' %}">Profil</a>
+                      <li class="rd-nav-item {% if 'profil/' in request.path %} active {% endif %}"><a class="rd-nav-link" href="{% url 'profil-user' %}">Profil</a>
                       {% endif %}
                       </li>
 

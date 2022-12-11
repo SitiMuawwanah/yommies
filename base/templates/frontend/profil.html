@@ -1,0 +1,92 @@
+{% extends 'main.html' %} 
+
+{% load static %}    
+{% block content %} 
+  <!--Forms-->
+      <section class="section section-md bg-default text-center">
+        <div class="container">
+          <div class="row justify-content-md-center">
+            <div class="col-md-9 col-lg-7 col-xl-5">
+              <h3>Edit Profil</h3>
+              <div class="text-decoration-lines"><span class="text-decoration-lines-content">use</span></div>
+              <!--RD Mailform-->
+              <form class="rd-form rd-form-centered" method="POST" action="">
+                {% csrf_token %}
+                <div class="form-wrap">
+                  <input class="form-input" id="nama_depan" value="{{request.user.first_name}}" type="text" name="first_name" data-constraints="@Required">
+                  <label class="form-label" for="nama_depan">Nama Depan</label>
+                </div>
+                <div class="form-wrap">
+                  <input class="form-input" id="nama_belakang" value="{{request.user.last_name}}" type="text" name="last_name" data-constraints="@Required">
+                  <label class="form-label" for="nama_belakang">Nama Belakang</label>
+                </div>
+                <div class="form-wrap">
+                  <input class="form-input" id="username" type="text" value="{{request.user.username}}" name="username" data-constraints="@Required">
+                  <label class="form-label" for="username">Username</label>
+                </div>
+                <div class="form-wrap">
+                  <input class="form-input" id="login-password1" type="password" name="{{form.password1.name}}" data-constraints="@Required">
+                  <label class="form-label" for="login-password1">Password</label>
+                  <small>Kosongkan Password Bila Tidak Diubah</small>
+                </div>
+                <div class="form-wrap">
+                  <input class="form-input" id="login-password2" type="password" name="{{form.password2.name}}" data-constraints="@Required">
+                  <label class="form-label" for="login-password2">Konfirmasi Password</label>
+                </div>
+                <button class="button button-block button-primary" type="submit">Edit</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="section">
+        <div class="container wide">
+          <div class="divider"></div>
+        </div>
+      </div>
+
+  <section class="section section-lg bg-default text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+              <h3>Bookmark Resep</h3>
+                <!--Bootstrap tabs-->
+                <div class="tabs-vertical tabs-corporate ">
+                    <div class="tab-content">
+                        <div class="section">
+                            <div class="container wide">
+                                <div class="row row-md-80 row-sm-50">
+                                    {% for resep in bookmarks %}
+                                    <div class="col-xs-12 col-md-6 col-lg-4">
+                                        <div class="box-info-modern box-md">
+                                            <div class="box-info-modern-figure">
+                                                <a href="{% url 'detail-resep-masakan' resep.key_resep %}" title="{{resep.title_resep}}">
+                                                  {% if resep.thumb_resep != NULL %}
+                                                  <img src="{{media_url}}{{resep.thumb_resep}}" alt="" width="390" height="344"/>
+                                                  {% else %}
+                                                  <img src="{% static 'frontend/images/default-image.png' %}" alt="" style="height: 213px;" />
+                                                  {% endif %}
+                                                </a>
+                                            </div>
+                                            <div class="box-info-modern-title">
+                                                <a href="{% url 'detail-resep-masakan' resep.key_resep %}" title="{{resep.title_resep}}">{{resep.title_resep|slice:":20"}}...</a>
+                                            </div>
+                                            <div class="box-info-modern-text small">
+                                                <i class="icon-sm mdi mdi-alarm"></i> {{resep.times_resep}}
+                                                <i class="icon-sm mdi mdi-food"></i> {{resep.serving_resep}}
+                                                <i class="icon-sm mdi mdi-chart-areaspline"></i> {{resep.difficulty_resep}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
