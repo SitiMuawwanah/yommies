@@ -378,6 +378,9 @@ def detailResep(request, key):
                 user=request.user,
             )
             messages.success(request, "Bookmark Berhasil Ditambahkan ✅")
+        elif request.POST.get('key_unbookmarks'):
+            Bookmarks.objects.get(key_resep=key,user=request.user).delete()
+            messages.success(request, "Bookmark Berhasil Dihapus.")
         return redirect(request.META.get('HTTP_REFERER'))
     context = {'resep':resep,'media_url':settings.MEDIA_URL,'ingredient':ingredient,'step':step,'url_youtube':url_youtube,'from_api':from_api,'komentars':komentars,'key':key,'bookmark':bookmark}
     return render(request, 'frontend/detail_resep.html', context)
@@ -386,6 +389,7 @@ def tentang(request):
     context = {}
     return render(request, 'frontend/tentang.html', context)
 
+@login_required(login_url='login')
 def profilUser(request):
     user = request.user
     form = forms.UserForm(instance=user)
