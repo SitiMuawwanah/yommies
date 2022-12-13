@@ -40,6 +40,7 @@
                                     <th>No.</th>
                                     <th>Judul</th>
                                     <th>Kategori</th>
+                                    <th>Key</th>
                                     <th>Thumbnail</th>
                                     <th>Aksi</th>
                                 </tr>
@@ -50,6 +51,7 @@
                                     <td>{{forloop.counter}}</td>
                                     <td>{{resep.title}}</td>
                                     <td>{{resep.kategori_resep}}</td>
+                                    <td>{{resep.key}}</td>
                                     <td><img src="{{media_url}}{{resep.thumb}}" width="20%"></td>
                                     <td>
                                         <a href="{% url 'edit-resep' resep.id %}"  class="btn btn-sm btn-warning btn-tambah" id="btnAdd" >

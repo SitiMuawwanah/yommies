@@ -435,6 +435,7 @@ def sinkron(request):
     data = kategori.json()
     kategori_resep = data['results']
     for kategori in kategori_resep:
+        key_kategori = kategori['key']
         if KategoriResep.objects.filter(key=kategori['key']).exists() == False:
             KategoriResep.objects.create(
                 category=kategori['category'],
@@ -444,7 +445,73 @@ def sinkron(request):
         else:
             KategoriResep.objects.filter(key=kategori['key']).update(category=kategori['category'],key=kategori['key'])
 
-    # Sinkron Resep
+        get_kategori = KategoriResep.objects.get(key=key_kategori)
+        url_resep_by_kategori = f'{base_url}/category/recipes/{key_kategori}'
+        reseps = requests.get(url_resep_by_kategori)
+        data_resep = reseps.json()
+        api_resep = data_resep['results']
+
+        for resep in api_resep:
+            image_url = resep['thumb']
+            filename = r"media/"+image_url.split("/")[-1]
+            nama_file_diubah = image_url.split("/")[-1]
+            r = requests.get(image_url, stream = True)
+            if r.status_code == 200:
+                r.raw.decode_content = True            
+                with open(filename,'wb') as f:
+                    shutil.copyfileobj(r.raw, f)
+                print('Image sucessfully Downloaded: ',filename)
+            else:
+                print('Image Couldn\'t be retreived')
+
+            key_resep = resep['key']
+            # GET DETAIL DULU
+            url_detail_resep = f'{base_url}/recipe/{key_resep}'
+            detail_reseps = requests.get(url_detail_resep)
+            json_resep = detail_reseps.json()
+            data_detail_resep = json_resep['results']
+
+            ingredient_join = ', '.join(data_detail_resep['ingredient'])
+            step_join = ', '.join(data_detail_resep['step'])
+
+            if Resep.objects.filter(key=resep['key']).exists() == False:
+                Resep.objects.create(
+                    title=resep['title'],
+                    key=resep['key'],
+                    thumb=nama_file_diubah,
+                    serving=resep['serving'],
+                    times=resep['times'],
+                    difficulty=resep['difficulty'],
+                    is_from_api=1,
+
+                    author_datePublished=data_detail_resep['author']['datePublished'],
+                    author_user=data_detail_resep['author']['user'],
+                    desc = data_detail_resep['desc'],
+                    ingredient = ingredient_join,
+                    step = step_join,
+
+                    kategori_resep_id=get_kategori.id,
+                )
+            else:
+                Resep.objects.filter(key=resep['key']).update(
+                    title=resep['title'],
+                    key=resep['key'],
+                    thumb=nama_file_diubah,
+                    serving=resep['serving'],
+                    times=resep['times'],
+                    difficulty=resep['difficulty'],
+                    is_from_api=1,
+
+                    author_datePublished=data_detail_resep['author']['datePublished'],
+                    author_user=data_detail_resep['author']['user'],
+                    desc = data_detail_resep['desc'],
+                    ingredient = ingredient_join,
+                    step = step_join,
+
+                    kategori_resep_id=get_kategori.id,
+                )
+
+    # Sinkron Resep Aja
     url_resep = f'{base_url}/recipes'
     reseps = requests.get(url_resep)
     data_resep = reseps.json()
@@ -469,6 +536,9 @@ def sinkron(request):
         json_resep = detail_reseps.json()
         data_detail_resep = json_resep['results']
 
+        ingredient_join = ', '.join(data_detail_resep['ingredient'])
+        step_join = ', '.join(data_detail_resep['step'])
+
         if Resep.objects.filter(key=resep['key']).exists() == False:
             Resep.objects.create(
                 title=resep['title'],
@@ -482,14 +552,14 @@ def sinkron(request):
                 author_datePublished=data_detail_resep['author']['datePublished'],
                 author_user=data_detail_resep['author']['user'],
                 desc = data_detail_resep['desc'],
-                ingredient = data_detail_resep['ingredient'],
-                step = data_detail_resep['step'],
+                ingredient = ingredient_join,
+                step = step_join,
             )
         else:
             Resep.objects.filter(key=resep['key']).update(
                 title=resep['title'],
                 key=resep['key'],
-                thumb=resep['thumb'],
+                thumb=nama_file_diubah,
                 serving=resep['serving'],
                 times=resep['times'],
                 difficulty=resep['difficulty'],
@@ -498,8 +568,8 @@ def sinkron(request):
                 author_datePublished=data_detail_resep['author']['datePublished'],
                 author_user=data_detail_resep['author']['user'],
                 desc = data_detail_resep['desc'],
-                ingredient = data_detail_resep['ingredient'],
-                step = data_detail_resep['step'],
+                ingredient = ingredient_join,
+                step = step_join,
             )
 
     messages.success(request, "Sukses Sinkronisasi, Silakan Cek Data." )
