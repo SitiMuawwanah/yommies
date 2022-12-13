@@ -17,20 +17,20 @@ class KategoriResep(models.Model):
     # class Meta:
     #     ordering = ['-updated', '-created']
 
-    def save(self, **kwargs):
-        self.key = slugify(self.category)
-        super().save()
+    # def save(self, **kwargs):
+    #     self.key = slugify(self.category)
+    #     super().save()
 
-    def get_absolute_url(self):
-        url_slug = {'key':self.key}
-        return reverse('kategori', kwargs = url_slug)
+    # def get_absolute_url(self):
+    #     url_slug = {'key':self.key}
+    #     return reverse('kategori', kwargs = url_slug)
         
     def __str__(self):
         return self.category
 
 class Resep(models.Model):
     title               = models.CharField(max_length=255,null=True)
-    key                 = models.SlugField(blank=True, editable=False)
+    key                 = models.CharField(max_length=255,null=True)
     desc                = models.TextField(null=True)
     thumb               = models.ImageField(upload_to='images_resep/',null=True)
     ingredient          = models.CharField(max_length=255,null=True)
@@ -50,13 +50,13 @@ class Resep(models.Model):
     is_from_api         = models.BooleanField(null=True,default=0)
 
 
-    def save(self, **kwargs):
-        self.key = slugify(self.title)
-        super().save()
+    # def save(self, **kwargs):
+    #     self.key = slugify(self.title)
+    #     super().save()
 
-    def get_absolute_url(self):
-        url_slug = {'key':self.key}
-        return reverse('blog', kwargs = url_slug)
+    # def get_absolute_url(self):
+    #     url_slug = {'key':self.key}
+    #     return reverse('blog', kwargs = url_slug)
         
     def __str__(self):
         return self.title

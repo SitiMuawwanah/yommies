@@ -12,6 +12,7 @@ urlpatterns = [
     # OPERATOR ROUTE
     path('operator/dashboard', views.dashboard, name="dashboard"),
     path('operator/profil', views.profil, name="profil"),
+    path('operator/sinkron', views.sinkron, name="sinkron"),
 
     # Resep Route
     path('operator/resep', views.resepIndex, name="resep"),

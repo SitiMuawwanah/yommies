@@ -12,6 +12,7 @@
 
         </div>
         <div class="text-center mt-4"> 
+          {% if request.user.is_authenticated %}
           {% if bookmark == False %}
           <form action="" method="POST">
             {% csrf_token %}
@@ -28,6 +29,7 @@
               <i class="mdi mdi-bookmark-remove"></i>&nbsp;Hapus Dari Bookmarks
             </button>
           </form>
+          {% endif %}
           {% endif %}
         </div>
       </div>
