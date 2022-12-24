@@ -33,7 +33,7 @@
                                     <select class="form-control" name="kategori_resep">
                                         <option value="">---Pilih Kategori---</option>
                                         {% for kategori in kategoris %}
-                                        <option value="{{kategori.id}}" {% if resep.kategori_resep_id == kategori.id %} selected {% endif %}>{{kategori.judul}}</option>
+                                        <option value="{{kategori.id}}" {% if resep.kategori_resep_id == kategori.id %} selected {% endif %}>{{kategori.category}}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
@@ -52,7 +52,12 @@
                                 <div>
                                     <input type="file" class="form-control" accept="image/*" onchange="loadFile(event)" name="gambar">
                                     <img id="output"/ width="20%">
-                                    <p>Gambar Sebelumnya : </p> <img src="{{media_url}}{{resep.thumb}}" width="20%">
+                                    <p>Gambar Sebelumnya : </p> 
+                                    {% if resep.is_from_api %}
+                                    <img src="{{resep.thumb}}" width="20%">
+                                    {% else %}
+                                    <img src="{{resep.thumb}}" width="20%">
+                                    {% endif %}
                                 </div>
                             </div>
 

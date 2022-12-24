@@ -28,6 +28,14 @@
                             </div>
 
                             <div class="form-group">
+                                <div><label>Gambar</label></div>
+                                <div>
+                                    <input type="file" class="form-control" accept="image/*" onchange="loadFile(event)" name="gambar">
+                                    <img id="output"/ width="20%">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
                                 <button type="submit" title="Simpan" class="btn btn-success"><i class="fa fa-save" aria-hidden="true"></i> Simpan</button>
                                 <a class="btn btn-primary" title="Kembali" href="{% url 'kategori' %}" role="button"><i class="fa fa-arrow-left" aria-hidden="true"></i> Kembali</a>
                             </div>
@@ -43,6 +51,15 @@
     <!-- /.content -->
 </div>
 {% block scripts %}
+<script type="text/javascript">
+    var loadFile = function(event) {
+        var output = document.getElementById('output');
+        output.src = URL.createObjectURL(event.target.files[0]);
+        output.onload = function() {
+URL.revokeObjectURL(output.src) // free memory
+}
+};
+</script>
 <script src="{% static 'assets/js/extensions/jquery.js' %}"></script>
 <script src="{% static 'assets/js/extensions/form-element-select.js' %}"></script>
 <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>

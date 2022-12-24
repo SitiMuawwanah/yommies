@@ -2,33 +2,102 @@
 
 {% load static %}    
 {% block content %} 
-
-<!--Vertical Tabs-->
- <div class="section section-lg bg-secondary">
-        <div class="container wide">
+<div class="section section-lg bg-secondary">
+        <div class="container">
           <div class="text-center">
-            <h1>Tentang Saya</h1>
-            <div class="subtitle-2"></div>
+            <h1>Tentang </h1>
+            <div class="subtitle-2">Yommies</div>
           </div>
         </div>
       </div>
       <div class="section section-lg bg-default">
         <div class="container">
           <div class="about-wrap">
+            <div class="subtitle">Penjelasan Website</div>
             <div class="row row-sm-30">
               <div class="col-lg-6">
-                <h2 class="title">Kontak untuk <br class="br-none"> keperluan bisnis</h2>
+                <h2 class="title">Yommies</h2>
+                <img src="{% static 'img-yommies.jpg' %}" alt="" width="390" height="360"/>
               </div>
               <div class="col-lg-6">
-              <div class="contacts-wrap">
-                <p>Nomor Telepon : </p>
-                <div class="phone-link-second"><a href="tel:+6289522915558">+62 895-2291-5558</a> <br> (Siti Muawwanah)</div>
-                <!-- <div class="phone-link-second"><a href="tel:#">1 000-234-78-90</a></div> -->
-                <p>Lokasi : </p><span>Samarinda, Kalimantan Timur.</span>
+                <div class="text-wrap-about mt-md-3 mt-sm-3 text-justify">
+                  <p class="big" style="color: #494f7c;">“Yommies: Resep Masakan Mudah & Praktis” adalah sistem website berbasis aplikasi yang dibuat untuk menyediakan fitur pencarian dan rekomendasi resep masakan yang praktis dan kekinian berdasarkan bahan makanan yang tersedia. Dengan adanya aplikasi berupa sistem informasi kelengkapan resep masakan ini, diharapkan dapat mempermudah masyarakat khususnya ibu-ibu rumah tangga dalam mendapatkan informasi berupa tips-tips resep, menu-menu masakan atau makanan yang inspiratif</p>
+                </div>
               </div>
-            </div>
             </div>
           </div>
         </div>
       </div>
+      <!-- <div class="section section section-xl bg-secondary">
+        <div class="container wide">
+          <div class="text-center">
+            <h2 class="title">Profil Pembuat</h2>
+          </div>
+          <div class="row">
+            <div class="col-xs-12 col-md-12 col-lg-12">
+              <div class="box-info-modern box-md">
+                <div class="box-info-modern-figure"><img src="{% static 'fotokuu.jpeg' %}" alt="" width="390" height="360"/>
+                </div>
+                <h4 class="box-info-modern-title">Siti Muawwanah</h4>
+                <div class="box-info-modern-text"><i class="icon-sm mdi mdi-tag-text-outline"></i> NIM : 2011102441153</div>
+                <div class="box-info-modern-text"> <i class="icon-sm mdi mdi-account-location"></i> Kelas : A</div>
+                <div class="box-info-modern-text"><i class="icon-sm mdi mdi-book-open-page-variant"></i> Mata Kuliah : Pemrograman Web Lanjut</div>
+                <div class="box-info-modern-text"><i class="icon-sm mdi mdi-gmail"></i> Email : 2011102441153@umkt.ac.id</div>
+                <div class="box-info-modern-text"><i class="icon-sm mdi mdi-cellphone-iphone"></i> Nomor HP : +62 895-2291-5558</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> -->
+
+      <section class="section section-xl bg-secondary">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-12 col-xl-12">
+              <div class="text-center">
+                <h3>Profil Pembuat</h3>
+              </div>
+              <div class="row row-30">
+                
+                <div class="col-md-6 text-primary">
+                  <div class="text-center">
+                  <h4 class="box-info-modern-title">Siti Muawwanah</h4>
+                  </div>
+                  <br>
+                  <table align="right" >
+                    <tr>
+                      <td><div class="box-info-modern-text"><i class="icon-sm mdi mdi-tag-text-outline"></i> NIM </div></td>
+                      <td>: </td>
+                      <td><div class="box-info-modern-text">2011102441153</div></td>
+                    </tr>
+                    <tr>
+                      <td><div class="box-info-modern-text"><i class="icon-sm mdi mdi-account-location"></i> Kelas </div></td>
+                      <td>: </td>
+                      <td><div class="box-info-modern-text">A</div></td>
+                    </tr>
+                    <tr>
+                      <td><div class="box-info-modern-text"><i class="icon-sm mdi mdi-book-open"></i> Mata Kuliah &nbsp;</div></td>
+                      <td>: &nbsp;</td>
+                      <td><div class="box-info-modern-text">Pemrograman Web Lanjut</div></td>
+                    </tr>
+                    <tr>
+                      <td><div class="box-info-modern-text"><i class="icon-sm mdi mdi-gmail"></i> Email </div></td>
+                      <td>: </td>
+                      <td><div class="box-info-modern-text">2011102441153@umkt.ac.id</div></td>
+                    </tr>
+                    <tr>
+                      <td><div class="box-info-modern-text"><i class="icon-sm mdi mdi-cellphone-iphone"></i> Nomor HP </div></td>
+                      <td>: </td>
+                      <td><div class="box-info-modern-text">+62 895-2291-5558</div></td>
+                    </tr>             
+                </table>
+                </div>
+                <div class="col-md-6 text-center">
+                  <img src="{% static 'fotokuu.jpeg' %}" alt="" width="50%" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 {% endblock %}

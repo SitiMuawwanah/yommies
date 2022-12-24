@@ -26,6 +26,19 @@
                                     <input class="form-control" type="text" value="{{kategori.category}}" name="category">
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <div><label>Gambar</label></div>
+                                <div>
+                                    <input type="file" class="form-control" accept="image/*" onchange="loadFile(event)" name="gambar">
+                                    <img id="output"/ width="20%">
+                                    <p>Gambar Sebelumnya : </p> 
+                                    {% if kategori.is_from_api %}
+                                    <img src="{% static 'frontend/images/kategori/' %}{{kategori.key}}.jpg" width="20%">
+                                    {% else %}
+                                    <img src="{{media_url}}{{kategori.thumb}}" width="20%">
+                                    {% endif %}
+                                </div>
+                            </div>
 
                             <div class="form-group">
                                 <button type="submit" title="Simpan" class="btn btn-success"><i class="fa fa-save" aria-hidden="true"></i> Simpan</button>

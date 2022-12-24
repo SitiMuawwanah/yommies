@@ -19,6 +19,9 @@
             font-family: "Poppins", sans-serif;
         }
     </style>
+    {% block styles %}
+
+    {% endblock %}
 
 
 </head>
@@ -55,6 +58,9 @@
       </script>
     {% endfor %}
     {% endif %}
+    {% block scripts %}
+
+    {% endblock  %}
 
 </body>
 

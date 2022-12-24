@@ -9,6 +9,7 @@ import datetime
 class KategoriResep(models.Model):
     category = models.CharField(max_length=255,null=True)
     key = models.CharField(max_length=255,null=True)
+    thumb = models.ImageField(upload_to='images_kategori_resep/',null=True)
     is_from_api = models.BooleanField(null=True)
 
     created = models.DateTimeField(auto_now_add=True)
@@ -38,8 +39,6 @@ class Resep(models.Model):
     times               = models.CharField(max_length=255,null=True)
     serving             = models.CharField(max_length=255,null=True)
     difficulty          = models.CharField(max_length=255,null=True)
-    needItem_itemName   = models.CharField(max_length=255,null=True)
-    needItem_thumbItem  = models.CharField(max_length=255,null=True)
     author              = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     url_youtube         = models.CharField(max_length=255, null=True)
     created             = models.DateTimeField(auto_now_add=True)
@@ -75,13 +74,14 @@ class KomentarResep(models.Model):
         return self.key_resep
 
 class Bookmarks(models.Model):
-    key_resep = models.CharField(max_length=255,null=True)
-    title_resep = models.CharField(max_length=255,null=True)
-    thumb_resep = models.CharField(max_length=255,null=True)
-    times_resep = models.CharField(max_length=255,null=True)
-    serving_resep = models.CharField(max_length=255,null=True)
-    difficulty_resep = models.CharField(max_length=255,null=True)
+    # key_resep = models.CharField(max_length=255,null=True)
+    # title_resep = models.CharField(max_length=255,null=True)
+    # thumb_resep = models.CharField(max_length=255,null=True)
+    # times_resep = models.CharField(max_length=255,null=True)
+    # serving_resep = models.CharField(max_length=255,null=True)
+    # difficulty_resep = models.CharField(max_length=255,null=True)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    resep = models.ForeignKey(Resep, on_delete=models.SET_NULL, null=True)
 
     created = models.DateTimeField(auto_now_add=True)
 

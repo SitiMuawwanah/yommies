@@ -61,21 +61,25 @@
                                     <div class="col-xs-12 col-md-6 col-lg-4">
                                         <div class="box-info-modern box-md">
                                             <div class="box-info-modern-figure">
-                                                <a href="{% url 'detail-resep-masakan' resep.key_resep %}" title="{{resep.title_resep}}">
-                                                  {% if resep.thumb_resep != NULL %}
-                                                  <img src="{{media_url}}{{resep.thumb_resep}}" alt="" width="390" height="344"/>
+                                                <a href="{% url 'detail-resep-masakan' resep.resep.key %}" title="{{resep.resep.title}}">
+                                                  {% if resep.resep.thumb %}
+                                                  {% if resep.resep.is_from_api %}
+                                                  <img src="{{resep.resep.thumb}}" alt="" style="height: 200px; object-fit: cover;"/>
                                                   {% else %}
-                                                  <img src="{% static 'frontend/images/default-image.png' %}" alt="" style="height: 213px;" />
+                                                  <img src="{{media_url}}{{resep.resep.thumb}}" alt="" style="height: 200px; object-fit: cover;"/>
+                                                  {% endif %}
+                                                  {% else %}
+                                                  <img src="{% static 'frontend/images/default-image.png' %}" alt="" style="height: 200px; object-fit: cover;" />
                                                   {% endif %}
                                                 </a>
                                             </div>
                                             <div class="box-info-modern-title">
-                                                <a href="{% url 'detail-resep-masakan' resep.key_resep %}" title="{{resep.title_resep}}">{{resep.title_resep|slice:":20"}}...</a>
+                                                <a href="{% url 'detail-resep-masakan' resep.resep.key %}" title="{{resep.resep.title}}" style="font-size: 18px;">{{resep.resep.title|truncatewords:"4"}}...</a>
                                             </div>
-                                            <div class="box-info-modern-text small">
-                                                <i class="icon-sm mdi mdi-alarm"></i> {{resep.times_resep}}
-                                                <i class="icon-sm mdi mdi-food"></i> {{resep.serving_resep}}
-                                                <i class="icon-sm mdi mdi-chart-areaspline"></i> {{resep.difficulty_resep}}
+                                            <div class="box-info-modern-text small" style="font-size: 16px;">
+                                                <i class="icon-sm mdi mdi-alarm"></i> {{resep.resep.times}}
+                                                <i class="icon-sm mdi mdi-food"></i> {{resep.resep.serving}}
+                                                <i class="icon-sm mdi mdi-chart-areaspline"></i> {{resep.resep.difficulty}}
                                             </div>
                                         </div>
                                     </div>

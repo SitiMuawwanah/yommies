@@ -39,6 +39,7 @@
                                 <tr>
                                     <th>No.</th>
                                     <th>Kategori</th>
+                                    <th>Gambar</th>
                                     <th>Key</th>
                                     <th>Aksi</th>
                                 </tr>
@@ -48,6 +49,13 @@
                                 <tr>
                                     <td>{{forloop.counter}}</td>
                                     <td>{{kategori.category}}</td>
+                                    <td>
+                                        {% if kategori.is_from_api %}
+                                        <img src="{% static 'frontend/images/kategori/' %}{{kategori.key}}.jpg" width="20%">
+                                        {% else %}
+                                        <img src="{{media_url}}{{kategori.thumb}}" width="20%">
+                                        {% endif %}
+                                    </td>
                                     <td>{{kategori.key}}</td>
                                     <td>
                                         <a href="{% url 'edit-kategori' kategori.id %}"  class="btn btn-sm btn-warning btn-tambah" id="btnAdd" >

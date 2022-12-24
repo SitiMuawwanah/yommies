@@ -19,42 +19,40 @@ import shutil
 base_url = 'https://masak-apa-tomorisakura.vercel.app/api/'
 # Create your views here.
 def home(request):
-    url_kategori = f'{base_url}/category/recipes/'
-    kategori = requests.get(url_kategori)
-    data = kategori.json()
-    kategori_resep = data['results']
+    kategori_resep = KategoriResep.objects.all()
 
-    satu_resep_new = f'{base_url}/recipes-length/?limit=1'
-    satu_resep = requests.get(satu_resep_new)
-    resep_baru = satu_resep.json()
-    new_resep = resep_baru['results']
+    # satu_resep_new = f'{base_url}/recipes-length/?limit=1'
+    # satu_resep = requests.get(satu_resep_new)
+    # resep_baru = satu_resep.json()
+    # new_resep = resep_baru['results']
+    new_resep = Resep.objects.filter(is_from_api=0).order_by('-id')[:1]
     resep_by_yommies = Resep.objects.filter(is_from_api=0)[:9]
 
     search = request.GET.get('search')
     if request.GET.get('search'):
         # Cari dari api
-        url_cari = f'{base_url}/search/?q={search}'
-        cari = requests.get(url_cari)
-        data = cari.json()
-        resep_cari_api = data['results']
-        resep_cari_yommies = Resep.objects.filter(title__icontains=request.GET.get('search'),is_from_api=0)[:9]
-        context = {'kategori_resep':kategori_resep,'new_resep':new_resep,'resep_by_yommies':resep_by_yommies,'media_url':settings.MEDIA_URL,'resep_cari_api':resep_cari_api,'resep_cari_yommies':resep_cari_yommies,'search':search}
+        # url_cari = f'{base_url}/search/?q={search}'
+        # cari = requests.get(url_cari)
+        # data = cari.json()
+        # resep_cari_api = data['results']
+        resep_cari_yommies = Resep.objects.filter(title__icontains=request.GET.get('search'))[:9]
+        context = {'kategori_resep':kategori_resep,'new_resep':new_resep,'resep_by_yommies':resep_by_yommies,'media_url':settings.MEDIA_URL,'resep_cari_yommies':resep_cari_yommies,'search':search}
     else:
         context = {'kategori_resep':kategori_resep,'new_resep':new_resep,'resep_by_yommies':resep_by_yommies,'media_url':settings.MEDIA_URL,'search':search}
     return render(request, 'frontend/home.html', context)
 
 
 def resepFull(request):
-    url_kategori = f'{base_url}/category/recipes/'
-    kategori = requests.get(url_kategori)
-    data = kategori.json()
-    kategori_resep = data['results']
+    # url_kategori = f'{base_url}/category/recipes/'
+    # kategori = requests.get(url_kategori)
+    # data = kategori.json()
+    # kategori_resep = data['results']
 
-    # Resep
-    url_resep = f'{base_url}/recipes'
-    reseps = requests.get(url_resep)
-    data_resep = reseps.json()
-    api_resep = data_resep['results']
+    # # Resep
+    # url_resep = f'{base_url}/recipes'
+    # reseps = requests.get(url_resep)
+    # data_resep = reseps.json()
+    # api_resep = data_resep['results']
 
     # for resep in api_resep:
     #     if Resep.objects.filter(key=resep['key']).exists() == False:
@@ -79,24 +77,25 @@ def resepFull(request):
     #         )
 
     kategoris = KategoriResep.objects.all()
+    reseps = Resep.objects.all()
 
-    context = {'api_resep':api_resep,'media_url':settings.MEDIA_URL,'kategori_resep':kategori_resep,'kategoris':kategoris}
+    context = {'reseps':reseps,'media_url':settings.MEDIA_URL,'kategoris':kategoris}
     return render(request, 'frontend/resep.html', context)
 
 def resepByKategori(request, key):
     nama_kategori = key.replace('-',' ')
     # Resep
-    kategori = KategoriResep.objects.filter(key=key).exists()
-    if kategori == False:
-        url_resep_by_kategori = f'{base_url}/category/recipes/{key}'
-        reseps = requests.get(url_resep_by_kategori)
-        data_resep = reseps.json()
-        api_resep = data_resep['results']
-    else:
-        kategori_resep = KategoriResep.objects.get(key=key)
-        api_resep = Resep.objects.filter(kategori_resep_id=kategori_resep.id)
+    # kategori = KategoriResep.objects.filter(key=key).exists()
+    # if kategori == False:
+    #     url_resep_by_kategori = f'{base_url}/category/recipes/{key}'
+    #     reseps = requests.get(url_resep_by_kategori)
+    #     data_resep = reseps.json()
+    #     api_resep = data_resep['results']
+    # else:
+    kategori_resep = KategoriResep.objects.get(key=key)
+    api_resep = Resep.objects.filter(kategori_resep_id=kategori_resep.id)
 
-    context = {'api_resep':api_resep,'media_url':settings.MEDIA_URL,'nama_kategori':nama_kategori,'kategori':kategori}
+    context = {'api_resep':api_resep,'media_url':settings.MEDIA_URL,'nama_kategori':nama_kategori}
     return render(request, 'frontend/resep_by_kategori.html', context)
 
 
@@ -177,9 +176,9 @@ def resepIndex(request):
 def resepHapus(request,pk):
     resep = Resep.objects.get(id=pk)
     if request.method == 'POST':
-        if resep.gambar:
-            if os.path.isfile(resep.gambar.path):
-                os.remove(resep.gambar.path)
+        if resep.thumb:
+            if os.path.isfile(resep.thumb.path):
+                os.remove(resep.thumb.path)
         resep.delete()
         messages.success(request, "Sukses Menghapus Resep." )
         return redirect('resep')
@@ -249,11 +248,11 @@ def resepEdit(request,pk):
         resep.serving  = request.POST.get('serving')
         resep.save()
         if request.FILES.get('gambar'):
-            if resep.gambar:
-                if os.path.isfile(resep.gambar.path):
-                    os.remove(resep.gambar.path)
+            if resep.thumb:
+                if os.path.isfile(resep.thumb.path):
+                    os.remove(resep.thumb.path)
             upload = request.FILES['gambar']
-            resep.gambar = upload.name
+            resep.thumb = upload.name
             resep.save()
             fss = FileSystemStorage()
             file = fss.save(upload.name, upload)
@@ -275,7 +274,7 @@ def resepDetail(request,pk):
 @login_required(login_url='login')
 def kategoriIndex(request):
     kategoris = KategoriResep.objects.all()
-    context = {'kategoris':kategoris}
+    context = {'kategoris':kategoris,'media_url':settings.MEDIA_URL}
     return render(request,'operator/kategori/index.html', context)
 
 @login_required(login_url='login')
@@ -293,10 +292,22 @@ def kategoriHapus(request,pk):
 def kategoriTambah(request):
     if request.method == 'POST':
         key_slug = request.POST.get('category').replace(" ", "-").lower()
-        KategoriResep.objects.create(
-            category=request.POST.get('category'),
-            key=key_slug
-        )
+        if request.FILES.get('gambar'):
+            upload = request.FILES['gambar']
+            gambar = upload.name
+            KategoriResep.objects.create(
+                category=request.POST.get('category'),
+                key=key_slug,
+                thumb=gambar,
+            )
+            fss = FileSystemStorage()
+            file = fss.save(upload.name, upload)
+            file_url = fss.url(file)
+        else:
+            KategoriResep.objects.create(
+                category=request.POST.get('category'),
+                key=key_slug,
+            )
         messages.success(request, "Sukses Menambah Kategori." )
         return redirect('kategori')
     context = {}
@@ -309,11 +320,21 @@ def kategoriEdit(request,pk):
         key_slug = request.POST.get('category').replace(" ", "-").lower()
         kategori.category  = request.POST.get('category')
         kategori.key  = key_slug
+        if request.FILES.get('gambar'):
+            if kategori.thumb:
+                if os.path.isfile(kategori.thumb.path):
+                    os.remove(kategori.thumb.path)
+            upload = request.FILES['gambar']
+            kategori.thumb = upload.name
+            kategori.save()
+            fss = FileSystemStorage()
+            file = fss.save(upload.name, upload)
+            file_url = fss.url(file)
         kategori.save()
         messages.success(request, "Sukses Mengubah Kategori." )
         return redirect('kategori')
 
-    context = {'kategori':kategori}
+    context = {'kategori':kategori,'media_url':settings.MEDIA_URL}
     return render(request, 'operator/kategori/edit.html', context)
 
 # EDIT PROFIl
@@ -344,27 +365,35 @@ def profil(request):
 def detailResep(request, key):
     komentars = KomentarResep.objects.filter(key_resep=key)
     if request.user.is_authenticated:
-        bookmark = Bookmarks.objects.filter(key_resep=key,user=request.user).exists()
+        bookmark = Bookmarks.objects.filter(resep__key=key,user=request.user).exists()
     # Resep
-    if Resep.objects.filter(key=key).exists() == False:
-        from_api = 1
-        url_detail_resep = f'{base_url}/recipe/{key}'
-        reseps = requests.get(url_detail_resep)
-        data_resep = reseps.json()
-        resep = data_resep['results']
-        ingredient = resep['ingredient']
-        step = resep['step']
-        url_youtube = ""
+    resep = Resep.objects.get(key=key)
+    ingredient = resep.ingredient.replace("[","").replace("]","").replace("', '","-").replace("'","").split("-")
+    step = resep.step.replace("[","").replace("]","").replace("', '","-").replace("'","").split("-")
+    if resep.url_youtube:
+        yt = resep.url_youtube.split("v=")
+        url_youtube = yt[1]
     else:
-        from_api = 0
-        resep = Resep.objects.get(key=key)
-        ingredient = resep.ingredient.split(", ")
-        step = resep.step.split(", ")
-        if resep.url_youtube:
-            yt = resep.url_youtube.split("v=")
-            url_youtube = yt[1]
-        else:
-            url_youtube = ""
+        url_youtube = ""
+    # if Resep.objects.filter(key=key).exists() == False:
+    #     from_api = 1
+    #     url_detail_resep = f'{base_url}/recipe/{key}'
+    #     reseps = requests.get(url_detail_resep)
+    #     data_resep = reseps.json()
+    #     resep = data_resep['results']
+    #     ingredient = resep['ingredient']
+    #     step = resep['step']
+    #     url_youtube = ""
+    # else:
+    #     from_api = 0
+    #     resep = Resep.objects.get(key=key)
+    #     ingredient = resep.ingredient.split(", ")
+    #     step = resep.step.split(", ")
+    #     if resep.url_youtube:
+    #         yt = resep.url_youtube.split("v=")
+    #         url_youtube = yt[1]
+    #     else:
+    #         url_youtube = ""
 
     if request.method == 'POST':
         if request.POST.get('komentar'):
@@ -375,28 +404,22 @@ def detailResep(request, key):
             )
             messages.success(request, "Komentar Berhasil Dikirim.")
         elif request.POST.get('key_bookmarks'):
-            url_resep_detail = f'{base_url}/recipe/{key}'
-            resepnya = requests.get(url_resep_detail)
-            datanya = resepnya.json()
-            result = datanya['results']
             Bookmarks.objects.create(
-                key_resep = key,
-                title_resep=result['title'],
-                times_resep=result['times'],
-                difficulty_resep=result['difficulty'],
-                thumb_resep=result['thumb'],
-                serving_resep=result['servings'],
+                resep=resep,
                 user=request.user,
             )
             messages.success(request, "Bookmark Berhasil Ditambahkan ✅")
         elif request.POST.get('key_unbookmarks'):
-            Bookmarks.objects.get(key_resep=key,user=request.user).delete()
+            Bookmarks.objects.get(resep=resep,user=request.user).delete()
             messages.success(request, "Bookmark Berhasil Dihapus.")
+        elif request.POST.get('komentarId'):
+            KomentarResep.objects.get(id=request.POST.get('komentarId'),user=request.user).delete()
+            messages.success(request, "Komentarmu Berhasil Dihapus.")
         return redirect(request.META.get('HTTP_REFERER'))
     if request.user.is_authenticated:
-        context = {'resep':resep,'media_url':settings.MEDIA_URL,'ingredient':ingredient,'step':step,'url_youtube':url_youtube,'from_api':from_api,'komentars':komentars,'key':key,'bookmark':bookmark}
+        context = {'resep':resep,'media_url':settings.MEDIA_URL,'ingredient':ingredient,'step':step,'url_youtube':url_youtube,'komentars':komentars,'key':key,'bookmark':bookmark}
     else:
-        context = {'resep':resep,'media_url':settings.MEDIA_URL,'ingredient':ingredient,'step':step,'url_youtube':url_youtube,'from_api':from_api,'komentars':komentars,'key':key}
+        context = {'resep':resep,'media_url':settings.MEDIA_URL,'ingredient':ingredient,'step':step,'url_youtube':url_youtube,'komentars':komentars,'key':key}
     return render(request, 'frontend/detail_resep.html', context)
 
 def tentang(request):

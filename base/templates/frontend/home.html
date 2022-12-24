@@ -26,47 +26,6 @@
       <section class="section section-lg bg-default text-center">
         <div class="container">
           <div class="text-center">
-            <h2 class="title">Resep Pilihan Yommies</h2>
-            <div class="subtitle-2">Pilihan Resep Dari Admin Yommies ✨</div>
-          </div>
-          <div class="row">
-            <div class="col-12">
-              <!--Bootstrap tabs-->
-              <div class="tabs-vertical tabs-corporate ">
-                <div class="tab-content">
-                  <div class="section">
-                    <div class="container wide">
-                      <div class="row row-md-80 row-sm-50">
-                        {% for cari_yommies in resep_cari_yommies %}
-                        <div class="col-xs-12 col-md-6 col-lg-4">
-                          <div class="box-info-modern box-md">
-                            <div class="box-info-modern-figure">
-                              <a href="{% url 'detail-resep-masakan' cari_yommies.key %}" title="{{cari_yommies.title}}"><img src="{{media_url}}{{cari_yommies.thumb}}" alt="" width="390" height="344"/></a>
-                            </div>
-                            <div class="box-info-modern-title">
-                              <a href="{% url 'detail-resep-masakan' cari_yommies.key %}" title="{{cari_yommies.title}}">{{cari_yommies.title|slice:":20"}}...</a>
-                            </div>
-                            <div class="box-info-modern-text small">
-                              <i class="icon-sm mdi mdi-alarm"></i> {{cari_yommies.times}}
-                              <i class="icon-sm mdi mdi-food"></i> {{cari_yommies.serving}}
-                              <i class="icon-sm mdi mdi-chart-areaspline"></i> {{cari_yommies.difficulty}}
-                            </div>
-                          </div>
-                        </div>
-                        {% endfor %}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section section-lg bg-default text-center">
-        <div class="container">
-          <div class="text-center">
             <h2 class="title">Resep Yang Cocok</h2>
             <div class="subtitle-2">Pilihan Resep Dari Pencarian Anda ✨</div>
           </div>
@@ -78,16 +37,26 @@
                   <div class="section">
                     <div class="container wide">
                       <div class="row row-md-80 row-sm-50">
-                        {% for resep in resep_cari_api %}
+                        {% for resep in resep_cari_yommies %}
                         <div class="col-xs-12 col-md-6 col-lg-4">
                           <div class="box-info-modern box-md">
                             <div class="box-info-modern-figure">
-                              <a href="{% url 'detail-resep-masakan' resep.key %}" title="{{resep.title}}"><img src="{{resep.thumb}}" alt="" width="390" height="344"/></a>
+                              <a href="{% url 'detail-resep-masakan' resep.key %}" title="{{resep.title}}">
+                                {% if resep.thumb %}
+                                {% if resep.is_from_api %}
+                                <img src="{{resep.thumb}}" alt="" style="height: 200px; object-fit: cover;"/>
+                                {% else %}
+                                <img src="{{media_url}}{{resep.thumb}}" alt="" style="height: 200px; object-fit: cover;"/>
+                                {% endif %}
+                                {% else %}
+                                <img src="{% static 'frontend/images/default-image.png' %}" alt="" style="height: 200px; object-fit: cover;" />
+                                {% endif %}
+                              </a>
                             </div>
                             <div class="box-info-modern-title">
-                              <a href="{% url 'detail-resep-masakan' resep.key %}" title="{{resep.title}}">{{resep.title|slice:":20"}}...</a>
+                              <a href="{% url 'detail-resep-masakan' resep.key %}" title="{{resep.title}}" style="font-size: 18px;">{{resep.title|slice:":20"}}...</a>
                             </div>
-                            <div class="box-info-modern-text small">
+                            <div class="box-info-modern-text small" style="font-size: 16px;">
                               <i class="icon-sm mdi mdi-alarm"></i> {{resep.times}}
                               <i class="icon-sm mdi mdi-food"></i> {{resep.serving}}
                               <i class="icon-sm mdi mdi-chart-areaspline"></i> {{resep.difficulty}}
@@ -120,7 +89,11 @@
               <a href="">
               <div class="box-info-modern box-md">
                 <div class="box-info-modern-figure">
+                  {% if kategori.is_from_api %}
                    <a href="{% url 'resep-by-kategori' kategori.key %}"><img src="/static/frontend/images/kategori/{{kategori.key}}.jpg" alt="" width="390" height="344" style="height: 344px; object-fit: cover;" /></a>
+                  {% else %}
+                   <a href="{% url 'resep-by-kategori' kategori.key %}"><img src="{{media_url}}{{kategori.thumb}}" alt="" width="390" height="344" style="height: 344px; object-fit: cover;" /></a>
+                   {% endif %}
                 </div>
                 <div class="box-info-modern-title">
                   <a href="{% url 'resep-by-kategori' kategori.key %}">{{kategori.category}}</a>
@@ -146,7 +119,13 @@
             {% for resep_baru in new_resep %}
             <div class="row">
               <div class="col-md-6 col-lg-6">
-                <a href="{% url 'detail-resep-masakan' resep_baru.key %}"><img src="{{resep_baru.thumb}}" alt="" width="580" height="550"/></a>
+                <a href="{% url 'detail-resep-masakan' resep_baru.key %}">
+                  {% if resep.is_from_api %}
+                  <img src="{{resep_baru.thumb}}" alt="" width="580" height="550"/>
+                  {% else %}
+                  <img src="{{media_url}}{{resep_baru.thumb}}" alt="" width="580" height="550"/>
+                  {% endif %}
+                </a>
               </div>
               <div class="col-md-6 col-lg-6">
                 <div class="">
@@ -175,6 +154,10 @@
         <div class="container wide">
           <div class="divider"></div>
         </div>
+        <div class="text-center mt-4">
+            <h2 class="title">Resep Yommies</h2>
+            <div class="subtitle-2">Pilihan Resep Dari Yommies Yang Dapat Kalian Pilih ✨</div>
+          </div>
       </div>
       <section class="section section-lg bg-default text-center">
     <div class="container">
@@ -192,16 +175,16 @@
                                             <div class="box-info-modern-figure">
                                                 <a href="{% url 'detail-resep-masakan' resep.key %}" title="{{resep.title}}">
                                                   {% if resep.thumb != NULL %}
-                                                  <img src="{{media_url}}{{resep.thumb}}" alt="" width="390" height="344"/>
+                                                  <img src="{{media_url}}{{resep.thumb}}" alt="" style="height: 200px; object-fit: cover;" />
                                                   {% else %}
-                                                  <img src="{% static 'frontend/images/default-image.png' %}" alt="" style="height: 213px;" />
+                                                  <img src="{% static 'frontend/images/default-image.png' %}" alt="" style="height: 200px; object-fit: cover;" />
                                                   {% endif %}
                                                 </a>
                                             </div>
                                             <div class="box-info-modern-title">
-                                                <a href="{% url 'detail-resep-masakan' resep.key %}" title="{{resep.title}}">{{resep.title|slice:":20"}}...</a>
+                                                <a href="{% url 'detail-resep-masakan' resep.key %}" title="{{resep.title}}" style="font-size: 18px;">{{resep.title|slice:":20"}}...</a>
                                             </div>
-                                            <div class="box-info-modern-text small">
+                                            <div class="box-info-modern-text small" style="font-size: 16px;">
                                                 <i class="icon-sm mdi mdi-alarm"></i> {{resep.times}}
                                                 <i class="icon-sm mdi mdi-food"></i> {{resep.serving}}
                                                 <i class="icon-sm mdi mdi-chart-areaspline"></i> {{resep.difficulty}}

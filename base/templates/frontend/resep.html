@@ -1,4 +1,4 @@
-{% extends 'main.html' %} 
+    {% extends 'main.html' %} 
 
 {% load static %}    
 {% block content %} 
@@ -20,9 +20,6 @@
                 <div class="tabs-vertical tabs-corporate ">
                     <!--Nav tabs-->
                     <ul class="nav nav-tabs">
-                        {% for kategori in kategori_resep %}
-                        <li class="nav-item"><a class="nav-link" href="{% url 'resep-by-kategori' kategori.key %}">{{kategori.category}}</a></li>
-                        {% endfor %}
                         {% for kat_resep in kategoris %}
                         <li class="nav-item"><a class="nav-link" href="{% url 'resep-by-kategori' kat_resep.key %}">{{kat_resep.category}}</a></li>
                         {% endfor %}
@@ -32,16 +29,26 @@
                         <div class="section">
                             <div class="container wide">
                                 <div class="row row-md-80 row-sm-50">
-                                    {% for resep in api_resep %}
+                                    {% for resep in reseps %}
                                     <div class="col-xs-10 col-md-6 col-lg-4">
                                         <div class="box-info-modern box-md">
                                             <div class="box-info-modern-figure">
-                                                <a href="{% url 'detail-resep-masakan' resep.key %}" title="{{resep.title}}"><img src="{{resep.thumb}}" alt="" width="390" height="344"/></a>
+                                                <a href="{% url 'detail-resep-masakan' resep.key %}" title="{{resep.title}}">
+                                                    {% if resep.thumb %}
+                                                    {% if resep.is_from_api %}
+                                                    <img src="{{resep.thumb}}" alt="" style="height: 200px; object-fit: cover;"/>
+                                                    {% else %}
+                                                    <img src="{{media_url}}{{resep.thumb}}" alt="" style="height: 200px; object-fit: cover;"/>
+                                                    {% endif %}
+                                                    {% else %}
+                                                    <img src="{% static 'frontend/images/default-image.png' %}" alt="" style="height: 200px; object-fit: cover;" />
+                                                    {% endif %}
+                                                </a>
                                             </div>
                                             <div class="box-info-modern-title">
-                                                <a href="{% url 'detail-resep-masakan' resep.key %}" title="{{resep.title}}">{{resep.title|slice:":20"}}...</a>
+                                                <a href="{% url 'detail-resep-masakan' resep.key %}" title="{{resep.title}}" style="font-size: 16px;">{{resep.title|truncatewords:"3"}}</a>
                                             </div>
-                                            <div class="box-info-modern-text small">
+                                            <div class="box-info-modern-text small" style="font-size: 16px;">
                                                 <i class="icon-sm mdi mdi-alarm"></i> {{resep.times}}
                                                 <i class="icon-sm mdi mdi-food"></i> {{resep.serving}}
                                                 <i class="icon-sm mdi mdi-chart-areaspline"></i> {{resep.difficulty}}
